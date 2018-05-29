@@ -62,5 +62,39 @@ public class AddItemView {
         return itemCategory;
     }
     
+    public void setItemCategory(String category) {
+        itemCategory = category;
+    }
     
+    public int getItemDiscount() {
+        return itemDiscount;
+    }
+    
+    public void setItemDiscount(int discount) {
+        itemDiscount = discount;
+    }
+    
+    public String getItemImage() {
+        return itemImage;
+    }
+    
+    public void setItemImage(String image) {
+        itemImage = image;
+    }
+    
+    public double getItemPrice() {
+        return itemPrice;
+    }
+    
+    public void setItemPrice(double price) {
+        itemPrice = price;
+    }
+    
+    public int getItemStock() {
+        return itemStock;
+    }
+    
+    public void setItemStock(int stock) {
+        itemStock = stock;
+    }
 }
