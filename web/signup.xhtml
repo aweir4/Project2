@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body>
+        <h:form id="signupForm">            
+            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+
+            <p:panel id="signupPnl" header="Signup"
+			style="width: 350px; margin: 0 auto;">
+                <h:panelGrid id="signupPanel" columns ="1" cellpadding="5">
+                    <h:panelGrid id="userPanel" columns="2" cellpadding="5" 
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Username" />
+                        <p:inputText id="userLogin" value="#{signup.login}"
+                                     required ="true"
+                                     requiredMessage="You must enter user login"
+                                     validator="#{signup.validateLogin}"/>
+                    </h:panelGrid>
+                    <p:message for="userLogin"/>
+                    
+                    <h:panelGrid id="pwrdPanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Password" />
+                        <p:password id="userpassword" value="#{signup.password}"
+                                    required ="true"
+                                    requiredMessage="Must enter password" 
+                                    feedback="false"/>
+                    </h:panelGrid>
+                    <p:message for="userpassword"/>
+                    
+                    <h:panelGrid id="emailPanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Email" />
+                        <p:inputText id="email" value="#{signup.email}"
+                                    required ="true"
+                                    requiredMessage="Must enter email"
+                                    validatorMessage="Please enter valid email">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    <p:message for="email"/>
+                    
+                    <h:panelGrid id="fNamePanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="First Name" />
+                        <p:inputText id="fName" value="#{signup.firstName}"
+                                    required ="true"
+                                    requiredMessage="Must enter first name"/>
+                    </h:panelGrid>
+                    <p:message for="fName"/>
+                    
+                    <h:panelGrid id="lNamePanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Last Name" />
+                        <p:inputText id="lName" value="#{signup.lastName}"
+                                    required ="true"
+                                    requiredMessage="Must enter last name"/>
+                    </h:panelGrid>
+                    <p:message for="lName"/>
+                    
+                    <h:panelGrid id="AddrPanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Address" />
+                        <p:inputText id="address" value="#{signup.address}"
+                                    required ="true"
+                                    requiredMessage="Must enter address">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    <p:message for="address"/>
+                    
+                    <h:panelGrid id="crdNumPanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Credit Card Number" />
+                        <p:inputText id="crdNum" value="#{signup.cardNumber}"
+                                    required ="true"
+                                    requiredMessage="Must enter credit card number"
+                                    validator="#{signup.validateCardNumber}">
+                            <f:validateLength minimum="12" maximum="19"/>
+                        </p:inputText>
+                    </h:panelGrid>
+                    <p:message for="crdNum"/>
+                    
+                    <h:panelGrid id="crdCodePanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Security Code(CVV)" />
+                        <p:inputText id="crcCode" value="#{signup.crcCode}"
+                                    required ="true"
+                                    requiredMessage="Must enter crcCode"
+                                    validatorMessage="Must be a number of length 3 or 4">
+                            <f:validateRegex pattern="^[0-9]{3,4}$" />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <p:message for="crcCode"/>
+                    
+                    <h:panelGrid id="crdExpDatePanel" columns="2" cellpadding="5"
+                                 columnClasses="forty-percent, sixty-percent">
+                        <p:outputLabel value="Card Expiration Date" />
+                        <p:calendar id="crdDate" value="#{signup.cardExpiration}" 
+                                    pattern="MM/yy" required="true" 
+                                    requiredMessage="Must select date"/>
+                    </h:panelGrid>
+                    <p:message for="crdDate"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Create User" action="#{signup.createUser}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

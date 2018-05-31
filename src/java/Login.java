@@ -1,5 +1,9 @@
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.annotation.ManagedBean;
@@ -10,8 +14,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
-
-
+import javax.faces.event.ActionEvent;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,7 +22,8 @@ import javax.inject.Named;
  */
 /**
  *
- * @author stanchev
+ * @author bibek
+ * @author austin
  */
 @Named(value = "login")
 @SessionScoped
@@ -29,6 +33,8 @@ public class Login implements Serializable {
     private String login;
     private String password;
     private UIInput loginUI;
+    private String role = "customer";
+    private DBConnect dbConnect = new DBConnect();
 
     public UIInput getLoginUI() {
         return loginUI;
@@ -53,21 +59,78 @@ public class Login implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public void validate(FacesContext context, UIComponent component, Object value)
-            throws ValidatorException, SQLException {
+//    
+//    public void validateLogin(FacesContext context, UIComponent component,
+//            Object value) throws ValidatorException, SQLException {
+//        Connection con = dbConnect.getConnection();
+//        
+//        if(con == null){
+//            throw new SQLException("Can't get database connection");
+//        }
+//        
+//        login = value.toString();
+//        String qry = "Select * from users where userlogin = '" + login + "'";
+//        PreparedStatement ps = con.prepareStatement(qry);
+//        ResultSet result = ps.executeQuery();
+//        
+//        if(!result.next()) {
+//            FacesMessage errorMessage = new FacesMessage("Wrong login");
+//            throw new ValidatorException(errorMessage);
+//        };
+//        ps.close();
+//        con.close();
+//    }
+    
+    public void validate(FacesContext context, UIComponent component, 
+            Object value) throws ValidatorException, SQLException {
+        Connection con = dbConnect.getConnection();
+        
+        if(con == null){
+            throw new SQLException("Can't get database connection");
+        }
+        
         login = loginUI.getLocalValue().toString();
         password = value.toString();
-        System.out.println("hello");
-        if (!((login.equals("lubo") && password.equals("secret")))) {
-            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
+        
+        String qry = "Select userpassword, userrole from users where userlogin = '" + login + "'";
+        PreparedStatement ps = con.prepareStatement(qry);
+        System.out.println("Running query" + qry);
+        ResultSet result = ps.executeQuery();
+        
+        if(!result.next()) {
+            FacesMessage errorMessage = new FacesMessage("Wrong login");
             throw new ValidatorException(errorMessage);
-        }
+        };
+        
+        String password_actual = result.getString("userpassword");
+        role = result.getString("userrole");
+        System.out.println("hello i got " + password_actual);
+        
+        if (!password.equals(password_actual)) {
+            FacesMessage errorMessage = new FacesMessage(
+                    "Wrong password");
+            throw new ValidatorException(errorMessage);
+        } 
+        ps.close();
+        con.close();
     }
+    
+    public void logout() {
+     	FacesContext context = FacesContext.getCurrentInstance();
+     	context.getExternalContext().invalidateSession();
+         try {
+            context.getExternalContext().redirect("index.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     }
 
     public String go() {
       //  Util.invalidateUserSession();
+        if(role.equalsIgnoreCase("admin"))
+            return "admin";
+        if(role.equalsIgnoreCase("employee"))
+            return "employee";
         return "success";
     }
-
 }
