@@ -3,11 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.ManagedBean;
+import javax.el.ELContext;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -21,25 +26,21 @@ import javax.inject.Named;
  *
  * @author austinweir
  */
-@Named(value = "login")
+@Named(value = "additemview")
 @ManagedBean
 @ViewScoped
-public class AddItemView {
+public class AddItemView implements Serializable {
     private int itemId;
     private String itemName;
     private String itemDescription;
-    private String itemCategory;
-    private int itemDiscount;
+    private int itemDiscount = 0;
     private String itemImage;
-    private double itemPrice;
-    private int itemStock;
+    private double itemPrice = 0;
+    private int itemStock = 0;
+    private DBConnect dbConnect = new DBConnect();
     
     public int getItemId() {
         return itemId;
-    }
-    
-    public void setItemId(int id) {
-        itemId = id;
     }
     
     public String getItemName() {
@@ -56,14 +57,6 @@ public class AddItemView {
     
     public void setItemDescription(String description) {
         itemDescription = description;
-    }
-    
-    public String getItemCategory() {
-        return itemCategory;
-    }
-    
-    public void setItemCategory(String category) {
-        itemCategory = category;
     }
     
     public int getItemDiscount() {
@@ -96,5 +89,40 @@ public class AddItemView {
     
     public void setItemStock(int stock) {
         itemStock = stock;
+    }
+    
+    public String addNewItem() throws SQLException, ParseException, IOException  {
+        Connection connection = dbConnect.getConnection();
+        
+        if (connection == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        connection.setAutoCommit(false);
+        
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        CategoryDropdown dropdown = (CategoryDropdown) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "categorydropdown");
+        ItemImage img = (ItemImage) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "itemimage");        
+        
+        if (dropdown != null) {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Items(itemName, itemDescription, itemCategory, itemDiscount, itemImage, itemPrice, itemStock) VALUES(?,?,?,?,?,?,?)");
+            preparedStatement.setString(1, itemName);
+            preparedStatement.setString(2, itemDescription);
+            preparedStatement.setString(3, dropdown.getCategory());
+            preparedStatement.setInt(4, itemDiscount);
+            preparedStatement.setString(5, itemImage);
+            preparedStatement.setDouble(6, itemPrice);
+            preparedStatement.setInt(7, itemStock);
+        
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.commit();
+            connection.close();
+        
+            // Save the image to local disk
+            img.saveToDisk();
+            return "addItem";
+        }
+        
+        return "failure";
     }
 }

@@ -4,6 +4,26 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
     <managed-bean>
+        <managed-bean-name>additemview</managed-bean-name>
+        <managed-bean-class>AddItemView</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>categorydropdown</managed-bean-name>
+        <managed-bean-class>CategoryDropdown</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>itemimage</managed-bean-name>
+        <managed-bean-class>ItemImage</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>iteminventory</managed-bean-name>
+        <managed-bean-class>ItemInventory</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
         <managed-bean-name>selector</managed-bean-name>
         <managed-bean-class>Selector</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>

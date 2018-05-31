@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <title>Item Inventory</title>
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <h1>Items</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:dataTable var="item" value="#{iteminventory.items}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <p:column headerText="Id">
+                    <h:outputText value="#{item.itemId}" />
+                </p:column>
+
+                <p:column headerText="Name">
+                    <h:outputText value="#{item.itemName}" />
+                </p:column>
+
+                <p:column headerText="Description">
+                    <h:outputText value="#{item.itemDescription}" />
+                </p:column>
+ 
+                <p:column headerText="Category">
+                    <h:outputText value="#{item.itemCategory}" />
+                </p:column>
+                
+                <p:column headerText="Discount">
+                    <h:outputText value="#{item.itemDiscountPercent}" />
+                </p:column>                
+
+                <p:column headerText="Price">
+                    <h:outputText value="#{item.itemPrice}" />
+                </p:column>  
+                
+                <p:column headerText="Stock">
+                    <h:outputText value="#{item.itemStock}" />
+                </p:column>                
+                
+                <f:facet name="paginatorTopLeft">
+                    <p:commandButton type="button" icon="fa fa-sync" />
+                </f:facet>
+ 
+                <f:facet name="paginatorBottomRight">
+                    <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                </f:facet>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>

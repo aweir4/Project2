@@ -13,9 +13,9 @@ import javax.faces.bean.SessionScoped;
  *
  * @author stanchev
  */
-@Named(value = "selector")
+//@Named(value = "selector")
 @ManagedBean
-@SessionScoped
+//@SessionScoped
 public class Selector implements Serializable {
 
     private String[] choices = {"Create New Customer", "List All Customers", "Find Customer", "Delete Customer"};
