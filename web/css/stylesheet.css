@@ -21,3 +21,11 @@ h4 { margin: 10px 0 }
     background-color: #f5f5f5;
     border: 1px solid #ccc;
 }
+
+.forty-percent {
+                width: 150px;
+}
+
+.sixty-percent {
+    width: 200px;
+}
