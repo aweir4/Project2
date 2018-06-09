@@ -48,8 +48,8 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>  
     <managed-bean>
-        <managed-bean-name>signup</managed-bean-name>
-        <managed-bean-class>Signup</managed-bean-class>
+        <managed-bean-name>customerInfo</managed-bean-name>
+        <managed-bean-class>CustomerInfo</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>  
     <navigation-rule>
@@ -61,6 +61,7 @@
             <to-view-id>/start.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule> 
+    
     <navigation-rule>
         <from-view-id>
             /start.xhtml
@@ -95,6 +96,17 @@
     
     <navigation-rule>
         <from-view-id>
+            /start.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
             /newCustomer.xhtml
         </from-view-id>
         <navigation-case>
@@ -122,9 +134,4 @@
             <to-view-id>/start.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    
-    
-    
-    
-    
 </faces-config>

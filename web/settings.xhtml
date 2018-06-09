@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:tp = "http://java.sun.com/jsf/composite/Component">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body>
+        <tp:navBar link1 = "/faces/start.xhtml" userName = "#{login.login}"
+                       settingsLink = "/faces/settings.xhtml" 
+                       logoutButtonAction = "#{login.logout}" />
+        <h:form id="settingsForm">            
+            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+            <f:metadata>
+                <f:viewAction action="#{customerInfo.initFields(login.login)}" />
+            </f:metadata>
+            
+            <p:panel id="settingsPnl" header="Settings"
+			style="width: 450px; margin: 0 auto; text-align: center">
+                <h:panelGrid id="stngsPnl" columns ="1" cellpadding="5"
+                             style="text-align: left">
+                    
+                    <h:panelGrid id="userPnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="userStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Username" />
+                        <p:outputLabel value="${login.login}"
+                                       binding="#{customerInfo.loginUI}"/>
+                        <p:commandButton id="editBtn" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditLoginTrue}" 
+                                    update="userPnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="userStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editLogin}">
+                        <p:inputText id="newLogin" value="#{customerInfo.login}" 
+                                         required="#{customerInfo.editLogin}"
+                                         requiredMessage="Must enter valid new login" 
+                                         rendered="#{customerInfo.editLogin}"
+                                         validator="#{customerInfo.validateLogin}"/>
+                        <p:message for="newLogin"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="pwdPnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="pwdStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Password" />
+                        <p:outputLabel value="${customerInfo.maskedPassword}" />
+                        <p:commandButton id="editBtnPwd" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditPasswordTrue}" 
+                                    update="pwdPnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="pswrdStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editPassword}">
+                        <p:password id="newPswrd" value="#{customerInfo.password}" 
+                                         required="#{customerInfo.editPassword}"
+                                         requiredMessage="Must enter new password" 
+                                         rendered="#{customerInfo.editPassword}"/>
+                        <p:message for="newPswrd"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="emailPnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="emailStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Email" />
+                        <p:outputLabel value="${customerInfo.email}" />
+                        <p:commandButton id="editBtnEmail" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditEmailTrue}" 
+                                    update="emailPnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="emailStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editEmail}">
+                        <p:inputText id="newMail" value="#{customerInfo.email}" 
+                                         required="#{customerInfo.editEmail}"
+                                         requiredMessage="Must enter valid new email" 
+                                         rendered="#{customerInfo.editEmail}">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                        <p:message for="newMail"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="fNamePnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="fNameStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="First Name" />
+                        <p:outputLabel value="${customerInfo.firstName}" />
+                        <p:commandButton id="editBtnFName" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditFNameTrue}" 
+                                    update="fNamePnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="fNameStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editFName}">
+                        <p:inputText id="newFName" value="#{customerInfo.firstName}" 
+                                         required="#{customerInfo.editFName}"
+                                         requiredMessage="Must enter new first name" 
+                                         rendered="#{customerInfo.editFName}"/>
+                        <p:message for="newFName"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="lNamePnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="lNameStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Last Name" />
+                        <p:outputLabel value="${customerInfo.lastName}" />
+                        <p:commandButton id="editBtnLName" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditLNameTrue}" 
+                                    update="lNamePnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="lNameStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editLName}">
+                        <p:inputText id="newLName" value="#{customerInfo.lastName}" 
+                                         required="#{customerInfo.editLName}"
+                                         requiredMessage="Must enter new last name" 
+                                         rendered="#{customerInfo.editLName}"/>
+                        <p:message for="newLName"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="AddressPnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="AddressStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Address" />
+                        <p:outputLabel value="${customerInfo.address}" />
+                        <p:commandButton id="editBtnAddress" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditAddressTrue}" 
+                                    update="AddressPnlStg"/>
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="AddressStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editAddress}">
+                        <p:inputText id="newAddress" value="#{customerInfo.address}" 
+                                         required="#{customerInfo.editAddress}"
+                                         requiredMessage="Must enter valid new address" 
+                                         rendered="#{customerInfo.editAddress}">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                        <p:message for="newAddress"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="cardNumPnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="cardNumStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Credit Card Number" />
+                        <p:outputLabel value="${customerInfo.maskedCardNumber}" />
+                        <p:commandButton id="editBtnCardNum" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditCardNumberTrue}" 
+                                    update="cardNumPnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="cardNumStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editCardNumber}">
+                        <p:inputText id="newCardNum" value="#{customerInfo.cardNumber}" 
+                                         required="#{customerInfo.editCardNumber}"
+                                         requiredMessage="Must enter new credit card number" 
+                                         rendered="#{customerInfo.editCardNumber}"
+                                         validatorMessage="Must be a number of length 12 - 19">
+                            <f:validateRegex pattern="^[0-9]{12,19}$" />
+                        </p:inputText>
+                        <p:message for="newCardNum"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="cardCodePnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="cardCodeStng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Security Code(CVV)" />
+                        <p:outputLabel value="${customerInfo.maskedCrcCode}" />
+                        <p:commandButton id="editBtnCardCode" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditCrcCodeTrue}" 
+                                    update="cardCodePnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="cardCodeStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editCrcCode}">
+                        <p:inputText id="newCardCode" value="#{customerInfo.crcCode}" 
+                                         required="#{customerInfo.editCrcCode}"
+                                         requiredMessage="Must enter new crcCode" 
+                                         rendered="#{customerInfo.editCrcCode}"
+                                         validatorMessage="Must be a number of length 3 or 4">
+                            <f:validateRegex pattern="^[0-9]{3,4}$" />
+                        </p:inputText>
+                        <p:message for="newCardCode"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    <h:panelGrid id="cardExpDatePnlStg" columns="1" cellpadding="5">
+                    <h:panelGrid id="cardExpDatetng" columns="3" cellpadding="5" 
+                                 columnClasses="widthLen, widthLen, ten-percent">
+                        <p:outputLabel value="Card Expiration Date" />
+                        <p:outputLabel value="${customerInfo.formattedDate}" />
+                        <p:commandButton id="editBtnCardDate" value="Edit" >
+                            <p:ajax event = "click" 
+                                    listener="#{customerInfo.setEditCardExpirationTrue}" 
+                                    update="cardExpDatePnlStg" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid id="cardDateStng1" columns="2" cellpadding="5" 
+                                     columnClasses="widthLen, widthLen"
+                                     rendered="#{customerInfo.editCardExpiration}">
+                         <p:calendar id="newCardDate" value="#{customerInfo.cardExpiration}" 
+                                    pattern="MM/yy" 
+                                    required="#{customerInfo.editCardExpiration}"
+                                    rendered="#{customerInfo.editCardExpiration}"
+                                    requiredMessage="Must select new date"/>
+                        <p:message for="newCardDate"/>
+                    </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid> 
+                <h:panelGrid>
+                    <h:commandButton value="Update" action="#{customerInfo.updateUser()}"/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

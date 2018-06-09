@@ -42,6 +42,8 @@ public class Login implements Serializable {
 
     public void setLoginUI(UIInput loginUI) {
         this.loginUI = loginUI;
+        
+        
     }
 
     public String getLogin() {
@@ -116,13 +118,15 @@ public class Login implements Serializable {
     }
     
     public void logout() {
+        System.out.println("LOGOUT USER");
      	FacesContext context = FacesContext.getCurrentInstance();
      	context.getExternalContext().invalidateSession();
-         try {
-            context.getExternalContext().redirect("index.xhtml");
+        
+        try {
+            context.getExternalContext().redirect("/Project2/faces/index.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
      }
 
     public String go() {

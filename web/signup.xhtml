@@ -18,22 +18,23 @@ and open the template in the editor.
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
 
             <p:panel id="signupPnl" header="Signup"
-			style="width: 350px; margin: 0 auto;">
-                <h:panelGrid id="signupPanel" columns ="1" cellpadding="5">
+			style="width: 400px; margin: 0 auto; text-align: center">
+                <h:panelGrid id="signupPanel" columns ="1" cellpadding="5"
+                             style="text-align: left">
                     <h:panelGrid id="userPanel" columns="2" cellpadding="5" 
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Username" />
-                        <p:inputText id="userLogin" value="#{signup.login}"
+                        <p:inputText id="userLogin" value="#{customerInfo.login}"
                                      required ="true"
                                      requiredMessage="You must enter user login"
-                                     validator="#{signup.validateLogin}"/>
+                                     validator="#{customerInfo.validateLogin}"/>
                     </h:panelGrid>
                     <p:message for="userLogin"/>
                     
                     <h:panelGrid id="pwrdPanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
-                        <p:outputLabel value="Password" />
-                        <p:password id="userpassword" value="#{signup.password}"
+                                 columnClasses="widthLen, widthLen">
+                        <p:outputLabel for="userpassword" value="Password" />
+                        <p:password id="userpassword" value="#{customerInfo.password}"
                                     required ="true"
                                     requiredMessage="Must enter password" 
                                     feedback="false"/>
@@ -41,9 +42,9 @@ and open the template in the editor.
                     <p:message for="userpassword"/>
                     
                     <h:panelGrid id="emailPanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Email" />
-                        <p:inputText id="email" value="#{signup.email}"
+                        <p:inputText id="email" value="#{customerInfo.email}"
                                     required ="true"
                                     requiredMessage="Must enter email"
                                     validatorMessage="Please enter valid email">
@@ -53,50 +54,50 @@ and open the template in the editor.
                     <p:message for="email"/>
                     
                     <h:panelGrid id="fNamePanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="First Name" />
-                        <p:inputText id="fName" value="#{signup.firstName}"
+                        <p:inputText id="fName" value="#{customerInfo.firstName}"
                                     required ="true"
                                     requiredMessage="Must enter first name"/>
                     </h:panelGrid>
                     <p:message for="fName"/>
                     
                     <h:panelGrid id="lNamePanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Last Name" />
-                        <p:inputText id="lName" value="#{signup.lastName}"
+                        <p:inputText id="lName" value="#{customerInfo.lastName}"
                                     required ="true"
                                     requiredMessage="Must enter last name"/>
                     </h:panelGrid>
                     <p:message for="lName"/>
                     
                     <h:panelGrid id="AddrPanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Address" />
-                        <p:inputText id="address" value="#{signup.address}"
+                        <p:inputText id="address" value="#{customerInfo.address}"
                                     required ="true"
-                                    requiredMessage="Must enter address">
+                                    requiredMessage="Must enter valid address">
                             <f:validateLength minimum="5"/>
                         </p:inputText>
                     </h:panelGrid>
                     <p:message for="address"/>
                     
                     <h:panelGrid id="crdNumPanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Credit Card Number" />
-                        <p:inputText id="crdNum" value="#{signup.cardNumber}"
+                        <p:inputText id="crdNum" value="#{customerInfo.cardNumber}"
                                     required ="true"
                                     requiredMessage="Must enter credit card number"
-                                    validator="#{signup.validateCardNumber}">
-                            <f:validateLength minimum="12" maximum="19"/>
+                                    validatorMessage="Must be a number of length 12 - 19">
+                            <f:validateRegex pattern="^[0-9]{12,19}$" />
                         </p:inputText>
                     </h:panelGrid>
                     <p:message for="crdNum"/>
                     
                     <h:panelGrid id="crdCodePanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Security Code(CVV)" />
-                        <p:inputText id="crcCode" value="#{signup.crcCode}"
+                        <p:inputText id="crcCode" value="#{customerInfo.crcCode}"
                                     required ="true"
                                     requiredMessage="Must enter crcCode"
                                     validatorMessage="Must be a number of length 3 or 4">
@@ -106,16 +107,16 @@ and open the template in the editor.
                     <p:message for="crcCode"/>
                     
                     <h:panelGrid id="crdExpDatePanel" columns="2" cellpadding="5"
-                                 columnClasses="forty-percent, sixty-percent">
+                                 columnClasses="widthLen, widthLen">
                         <p:outputLabel value="Card Expiration Date" />
-                        <p:calendar id="crdDate" value="#{signup.cardExpiration}" 
+                        <p:calendar id="crdDate" value="#{customerInfo.cardExpiration}" 
                                     pattern="MM/yy" required="true" 
                                     requiredMessage="Must select date"/>
                     </h:panelGrid>
                     <p:message for="crdDate"/>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:commandButton value="Create User" action="#{signup.createUser}"/>
+                    <h:commandButton value="Create User" action="#{customerInfo.createUser}"/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
