@@ -22,10 +22,18 @@ h4 { margin: 10px 0 }
     border: 1px solid #ccc;
 }
 
-.forty-percent {
-                width: 150px;
+.widthLen {
+    width: 200px;
 }
 
-.sixty-percent {
+/*.sixty-percent {
     width: 200px;
+}*/
+
+.ten-percent {
+    width : 50px;
+}
+
+.userOpt {
+    float: right;
 }

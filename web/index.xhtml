@@ -4,43 +4,45 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <title>New Item</title>
+ 
     <h:head>
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
-        <h1>Home</h1>
+        <title>Login</title>
     </h:head>
-    <h:body>   
+    
+    <h:body>    
         <h:form id="loginForm">            
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
 
             <p:panel id="loginPnl" header="Login"
-			style="width: 350px; margin: 0 auto;">
-                <h:panelGrid id="loginPanel" columns ="1" cellpadding="5">
-                    
+                     style="width: 350px; margin: 0 auto; text-align: center; font-size: relative-size">
+                <h:panelGrid id="loginPanel" columns ="1" cellpadding="5"
+                             style="text-align: left">
+
                     <h:panelGrid id="userPanel" columns="2" cellpadding="5"
                                  columnClasses="forty-percent, sixty-percent">
                         <p:outputLabel value="Username" />
-                        <p:inputText id="username" value="#{login.login}"
-                                     required="true" binding="#{login.loginUI}"
+                        <p:inputText id="username" value="${login.login}"
+                                     required="true" binding="${login.loginUI}"
                                      requiredMessage="Must enter username"/>
                     </h:panelGrid>
                     <p:message for="username"/> 
-                    
+
                     <h:panelGrid id="passwordPanel" columns="2" cellpadding="5"
                                  columnClasses="forty-percent, sixty-percent">
                         <p:outputLabel value="Password" />
-                        <p:password id="password" value="#{login.password}"
+                        <p:password id="password" value="${login.password}"
                                     required ="true"
                                     requiredMessage="Must enter password"
-                                    validator="#{login.validate}"
+                                    validator="${login.validate}"
                                     feedback="false"/>
                     </h:panelGrid>
                     <p:message for="password"/>
-                    
+
                 </h:panelGrid>
                 <h:panelGrid columns="2" cellpadding="10" width="100%">
                     <h:link value="Not a user?" outcome="signup"/>
-                    <p:commandButton id="loginButton" action="#{login.go}" 
+                    <p:commandButton id="loginButton" action="${login.go}" 
                                      value="Login" update="loginForm" 
                                      ajax="true" style="float: right;"/>
                     <h:link value="View Items?" outcome="itemInventory"/>
