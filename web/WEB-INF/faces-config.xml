@@ -9,8 +9,31 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
+        <managed-bean-name>iteminventoryview</managed-bean-name>
+        <managed-bean-class>ItemInventoryView</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>service</property-name>
+            <value>#{itemservice}</value>        
+        </managed-property>   
+        <managed-property>
+            <property-name>categoryDropdown</property-name>
+            <value>#{categorydropdown}</value>        
+        </managed-property>              
+    </managed-bean> 
+     <managed-bean>
+        <managed-bean-name>itemservice</managed-bean-name>
+        <managed-bean-class>ItemService</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>      
+    <managed-bean>
         <managed-bean-name>categorydropdown</managed-bean-name>
         <managed-bean-class>CategoryDropdown</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>discountdropdown</managed-bean-name>
+        <managed-bean-class>DiscountDropdown</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>

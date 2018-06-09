@@ -39,8 +39,25 @@ public class AddItemView implements Serializable {
     private int itemStock = 0;
     private DBConnect dbConnect = new DBConnect();
     
+    public AddItemView() {
+        
+    }
+    public AddItemView(int id, String name, String description, int discount, String image, double price, int stock) {
+        itemId = id;
+        itemName = name;
+        itemDescription = description;
+        itemDiscount = discount;
+        itemImage = image;
+        itemPrice = price;
+        itemStock = stock;
+    }
+    
     public int getItemId() {
         return itemId;
+    }
+    
+    public void setItemId(int id) {
+        itemId = id;
     }
     
     public String getItemName() {

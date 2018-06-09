@@ -10,47 +10,233 @@
         <h1>Items</h1>
     </h:head>
     <h:body>
-        <h:form>
-            <p:dataTable var="item" value="#{iteminventory.items}" rows="10"
+        <h:form id="form">
+            <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"
+                         tableStyle="width:auto"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
+                         rowsPerPageTemplate="5,10,15"
+                         selectionMode="single"
+                         selection="#{iteminventoryview.selectedItem}"
+                         id="itemTable"
+                         lazy="true"
+                         >
+                <p:ajax event="rowSelect" listener="#{iteminventoryview.onRowSelect}" update=":form:itemDetail" oncomplete="PF('itemDialog').show()"/>
+                <!--p:ajax event="rowSelect" listener="" update=":viewForm:viewItem" oncomplete="PF('viewItemDialog').show()"/-->
+                
                 <p:column headerText="Id">
-                    <h:outputText value="#{item.itemId}" />
+                    <h:outputText value="#{item.id}" />
                 </p:column>
 
                 <p:column headerText="Name">
-                    <h:outputText value="#{item.itemName}" />
+                    <h:outputText value="#{item.name}" />
                 </p:column>
 
-                <p:column headerText="Description">
-                    <h:outputText value="#{item.itemDescription}" />
-                </p:column>
- 
                 <p:column headerText="Category">
-                    <h:outputText value="#{item.itemCategory}" />
+                    <h:outputText value="#{item.category}" />
+                </p:column>                
+                            
+                <p:column headerText="Image">     
+                    <p:graphicImage value="#{item.image}" stream="false" />
                 </p:column>
                 
+                <p:column headerText="Description">
+                    <h:outputText value="#{item.description}" />
+                </p:column>                
+                
                 <p:column headerText="Discount">
-                    <h:outputText value="#{item.itemDiscountPercent}" />
+                    <h:outputText value="#{item.discount}" />
                 </p:column>                
 
                 <p:column headerText="Price">
-                    <h:outputText value="#{item.itemPrice}" />
+                    <h:outputText value="#{item.price}" />
                 </p:column>  
                 
                 <p:column headerText="Stock">
-                    <h:outputText value="#{item.itemStock}" />
-                </p:column>                
+                    <h:outputText value="#{item.stock}" />
+                </p:column>  
                 
                 <f:facet name="paginatorTopLeft">
-                    <p:commandButton type="button" icon="fa fa-sync" />
+                    <p:commandButton type="button" icon="ui-icon-plusthick" onclick="PF('addItemDialog').show()" />
                 </f:facet>
  
-                <f:facet name="paginatorBottomRight">
+                <!--f:facet name="paginatorBottomRight">
                     <p:commandButton type="button" icon="fa fa-cloud-upload" />
-                </f:facet>
+                </f:facet-->
             </p:dataTable>
+            
+            <p:dialog header="Item Detail" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="400">
+                <p:outputPanel id="itemDetail" style="text-align:center;">
+                    <p:panelGrid columns="2" rendered="#{not empty iteminventoryview.selectedItem}" columnClasses="label,value">
+                        <f:facet name="header">
+                            <p:graphicImage id="itemImage" value="#{iteminventoryview.selectedItem.image}" stream="false"/>
+                        </f:facet>
+
+                        <h:outputText value="Id:" />
+                        <h:outputText value="#{iteminventoryview.selectedItem.id}" />                        
+ 
+                        <h:outputText value="Name:" />
+                        <h:inputText value="#{iteminventoryview.selectedItem.name}" />
+ 
+                        <h:outputText value="Category:" />                        
+                        <p:selectOneMenu id="category" value="#{iteminventoryview.selectedItem.category}">
+                            <f:selectItem itemLabel="Select Category" itemValue="#{iteminventoryview.selectedItem.category}" noSelectionOption="true" />
+                            <f:selectItems value="#{iteminventoryview.categoryDropdown.categories}"/>
+                        </p:selectOneMenu>                        
+                        
+                        <h:outputText value="Discount:" />
+                        <p:selectOneMenu id="discount" value="#{discountdropdown.discount}">
+                            <f:selectItem itemLabel="Select Discount" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{discountdropdown.discounts}"/>
+                        </p:selectOneMenu>
+ 
+                        <h:outputText value="Price:" />
+                        <h:inputText value="#{iteminventoryview.selectedItem.price}" />
+ 
+                        <h:outputText value="Stock:" />
+                        <h:inputText value="#{iteminventoryview.selectedItem.stock}"/> 
+                        
+                        <h:outputText value="Description:"/>
+                        <h:inputTextarea value="#{iteminventoryview.selectedItem.description}"/>
+                        
+                        <h:outputText value="Change Image:"/>
+                        <p:fileUpload fileUploadListener="#{iteminventoryview.handleUpdateFileUpload}" mode="advanced" update="itemImage"
+                                       auto="true" sizeLimit="100000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                        
+                        <f:facet name="footer">
+                            <p:commandButton value="Update" actionListener="#{iteminventoryview.updateItem}" update=":form:itemTable"
+                                             onclick="PF('itemDialog').hide()" />
+                        </f:facet>                          
+                        
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>           
         </h:form>
+ 
+        <p:dialog header="Item" widgetVar="viewItemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="400">
+            <h:form id="viewForm">
+                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                <p:outputPanel id="viewItem" style="text-align:center;">
+                    <p:panelGrid columns="3" columnClasses="label,value">
+                        <f:facet name="header">
+                            <p:graphicImage id="viewItemImage" value="#{iteminventoryview.selectedItem.image}" stream="false" />
+                        </f:facet>
+
+                        <h:outputText value="Name:" />
+                        <h:outputText id="viewItemName" value="#{iteminventoryview.selectedItem.name}"/>
+                        <h:message for="viewItemName" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Category:" />
+                        <h:outputText id="viewItemCategory" value="#{iteminventoryview.selectedItem.category}"/>
+                        <h:message for="viewItemCategory" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Discount:" />
+                        <h:outputText id="viewItemDiscount" value="#{iteminventoryview.selectedItem.discount}"/>
+                        <h:message for="viewItemDiscount" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Price:" />
+                        <h:outputText id="viewItemPrice" value="#{iteminventoryview.selectedItem.price}"/>
+                        <h:message for="viewItemPrice" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Stock:" />
+                        <h:outputText id="viewItemStock" value="#{iteminventoryview.selectedItem.stock}"/>
+                        <h:message for="viewItemStock" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Description:"/>
+                        <h:outputText id="viewItemDescription" value="#{iteminventoryview.selectedItem.description}"/>
+                        <h:message for="viewItemDescription" style="color:red;margin:8px;"/>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Add to Cart" actionListener="#{iteminventoryview.addNewItem}" update="growl"
+                                             oncomplete="handleAddRequest(xhr, status, args)" />
+                        </f:facet>                          
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>        
+        
+        <p:dialog header="Add Item" widgetVar="addItemDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" height="400">
+            <h:form id="addForm">
+                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                <p:outputPanel id="addItem" style="text-align:center;">
+                    <p:panelGrid columns="3" columnClasses="label,value">
+                        <f:facet name="header">
+                            <p:graphicImage id="addItemImage" value="#{iteminventoryview.newItem.image}" stream="false" />
+                        </f:facet>
+
+                        <h:outputText value="Name:" />
+                        <h:inputText value="#{iteminventoryview.newItem.name}" 
+                                     id="newItemName"
+                                     required="true"
+                                     requiredMessage="You must enter a name for this item" />
+                        <h:message for="newItemName" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Category:" />
+                        <p:selectOneMenu id="newItemCategory" value="#{iteminventoryview.newItem.category}" required="true"
+                                         requiredMessage="You must select a category for this item" >
+                            <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{iteminventoryview.categoryDropdown.categories}"/>
+                        </p:selectOneMenu>
+                        <h:message for="newItemCategory" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Discount:" />
+                        <p:selectOneMenu id="newItemDiscount" value="#{discountdropdown.discount}"  >
+                            <f:selectItem itemLabel="Select Discount" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{discountdropdown.discounts}"/>
+                        </p:selectOneMenu>
+                        <h:message for="newItemDiscount" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Price:" />
+                        <p:inputNumber id="newItemPrice" value="#{iteminventoryview.newItem.price}" required="true" 
+                                       symbol="$"
+                                       symbolPosition="p"
+                                       decimalSeparator="."
+                                       decimalPlaces="2"
+                                       thousandSeparator=","
+                                       minValue="0.00"
+                                     requiredMessage="You must select a price for this item" />
+                        <h:message for="newItemPrice" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Stock:" />
+                        <p:inputNumber id="newItemStock" value="#{iteminventoryview.newItem.stock}" required="true" 
+                                       decimalPlaces="0"
+                                       minValue="0"
+                                       thousandSeparator=","
+                                     requiredMessage="You must set the stock for this item"  /> 
+                        <h:message for="newItemStock" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Description:"/>
+                        <h:inputTextarea id="newItemDescription" value="#{iteminventoryview.newItem.description}" required="true" 
+                                         requiredMessage="You must enter a description for this item" />
+                        <h:message for="newItemDescription" style="color:red;margin:8px;"/>
+
+                        <h:outputText value="Upload Image:"/>
+                        <p:fileUpload fileUploadListener="#{iteminventoryview.handleAddFileUpload}" mode="advanced" required="true"
+                                      requiredMessage="You must upload an image for this item" id="newItemImage" update="addItemImage"
+                                       auto="true" sizeLimit="100000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                        <h:message for="newItemImage" style="color:red;margin:8px;"/>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Update" actionListener="#{iteminventoryview.addNewItem}" update="growl"
+                                             oncomplete="handleAddRequest(xhr, status, args)" />
+                        </f:facet>                          
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>             
+   
+        <script type="text/javascript">
+          function handleAddRequest(xhr, status, args) {
+              if(args.validationFailed || !args.loggedIn) {
+                  PF('addItemDialog').jq.effect("shake", {times:5}, 100);
+              }
+              else {
+                  PF('addItemDialog').hide();
+                  $('#loginLink').fadeOut();
+              }
+          }
+      </script>      
     </h:body>
 </html>
