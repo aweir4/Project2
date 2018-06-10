@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,18 +93,7 @@ public class ItemService {
             e.printStackTrace();
             return null;
         }    
-    }    
-    
-    public void updateItem(Item item) {
-        Connection connection = dbConnect.getConnection();
- 
-        if (connection == null) {
-            System.out.println("\nThere was an issue attempting to load the items from the database!!!");
-            return;
-        }    
-        
-        
-    }
+    }  
     
     public double getDiscount(ResultSet results) throws SQLException {
         Date startDate = results.getDate("startDate");
@@ -152,7 +142,66 @@ public class ItemService {
         result.close();
         con.close();
         return false;
-    }    
+    }  
+    
+    public int addNewItem(Item newItem) throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
+        String query = "INSERT INTO Items(itemName, itemDescription, itemCategory, itemDiscount, itemImage, itemPrice, itemStock)"
+                + "VALUES(?,?,?,?,?,?,?) RETURNING itemId";
+
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setString(1, newItem.name);
+        preparedStatement.setString(2, newItem.description);
+        preparedStatement.setString(3, newItem.category);
+        preparedStatement.setInt(4, newItem.discountId);
+        preparedStatement.setString(5, newItem.imageName);
+        preparedStatement.setDouble(6, newItem.price);
+        preparedStatement.setInt(7, newItem.stock);
+        //preparedStatement.executeUpdate();
+        ResultSet results = preparedStatement.executeQuery();
+        statement.close();
+        con.commit();
+        con.close();
+        
+        results.next();
+        return results.getInt(1);
+        //Util.invalidateUserSession();
+        //return true;       
+    }
+    
+    public boolean updateItem(Item item) throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);        
+ 
+        Statement statement = con.createStatement();
+        String query = "UPDATE Items SET itemName = ?, itemDescription = ?, itemCategory = ?, " 
+                + "itemDiscount = ?, itemImage = ?, itemPrice = ?, itemStock = ? WHERE itemId = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        
+        preparedStatement.setString(1, item.name);
+        preparedStatement.setString(2, item.description);
+        preparedStatement.setString(3, item.category);
+        preparedStatement.setInt(4, item.discountId);
+        preparedStatement.setString(5, item.imageName);
+        preparedStatement.setDouble(6, item.price);
+        preparedStatement.setInt(7, item.stock);   
+        preparedStatement.setInt(8, item.id);
+        
+        int affectedRows = preparedStatement.executeUpdate();
+                
+        return affectedRows > 0;
+    }
     
     public List<Item> getItems() {
         return items;

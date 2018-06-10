@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -29,6 +30,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -104,17 +106,54 @@ public class ItemInventoryView implements Serializable {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         DiscountDropdown dropdown = (DiscountDropdown) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "discountdropdown");
         //ItemImage img = (ItemImage) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "itemimage");  
+        FacesMessage message = null;
+        boolean itemUpdated = false;   
         
+        System.out.println("HERE!!!!!");
         
-        if (dropdown != null) {
-            String key = dropdown.getDiscount();
-            System.out.println("Discount KEY! : " + key);
+        try {
+            String discountKey = dropdown.getDiscount();
             Map<String, Discount> discountObjects = dropdown.getDiscountObjects();
-            Discount discount = discountObjects.get(key);
-            System.out.println("Discount Percentage!!!: " + String.valueOf(discount.getPercentage()));
+            Discount discount = discountObjects.get(discountKey);            
+            
+            if (discount == null) {
+                selectedItem.setDiscountId(0);
+                selectedItem.setDiscount(0);
+            }
+            else {
+                Date now = new Date();
+                Date startDate = discount.getStarDate();
+                Date endDate = discount.getEndDate();
+                
+                if ((startDate.compareTo(now) <= 0) && (endDate.compareTo(now) > 0)) {
+                    selectedItem.setDiscountId(discount.getId());
+                    selectedItem.setDiscount(discount.getPercentage());
+                }
+                else {
+                    selectedItem.setDiscountId(0);
+                    selectedItem.setDiscount(0);
+                }
+            }            
+            
+            itemUpdated = service.updateItem(selectedItem);
+            
+            if (itemUpdated) {
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Updated", "The item has been successfully updated");
+            }
+            else {
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Update Item Error", "The item was not updated");
+            }
+            
+        } catch(Exception e) {
+            System.out.println("Error attempting to update item in database!!!");
+            System.out.println(e.toString());
+            e.printStackTrace();
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Add Item Error", e.toString());
         }
         
-        System.out.println("Attempting to update the following item: " + selectedItem.getName());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        PrimeFaces.current().ajax().addCallbackParam("itemUpdated", itemUpdated);        
+       
         //System.out.println("Discount percent! : " + String.valueOf(dropdown.getDiscount().getPercentage()));
     }
     
@@ -124,12 +163,6 @@ public class ItemInventoryView implements Serializable {
         FacesMessage message = null;
         boolean itemAdded = false;
         
-        
-        
-        
-        System.out.println("HERE!!!!!!");
-        
-        
         if (newItem.image == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Add Item Error", "You must upload an image for this item");  
         }
@@ -138,16 +171,53 @@ public class ItemInventoryView implements Serializable {
                 if (service.itemAlreadyExists(newItem)) {
                     message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Add Item Error", "You must select a different name or category for this item");
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.out.println("Error attempting to query database to check item existence!!!");
                 e.printStackTrace();
                 
                 throw e;
             }
         }
+        try {
+            String discountKey = dropdown.getDiscount();
+            Map<String, Discount> discountObjects = dropdown.getDiscountObjects();
+            Discount discount = discountObjects.get(discountKey);
+            
+            if (discount == null) {
+                newItem.setDiscountId(0);
+                newItem.setDiscount(0);
+            }
+            else {
+                Date now = new Date();
+                Date startDate = discount.getStarDate();
+                Date endDate = discount.getEndDate();
+                
+                if ((startDate.compareTo(now) <= 0) && (endDate.compareTo(now) > 0)) {
+                    newItem.setDiscountId(discount.getId());
+                    newItem.setDiscount(discount.getPercentage());
+                }
+                else {
+                    newItem.setDiscountId(0);
+                    newItem.setDiscount(0);
+                }
+            }
+            
+            int generatedId = service.addNewItem(newItem);
+            newItem.setId(generatedId);
+            ((LazyItemDataModel) lazyModel).addItem(newItem);
+            itemAdded = true;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Added", "The item has been successfully added");
+            
+        } catch(Exception e) {
+            System.out.println("Error attempting to add item to the database!!!");
+            e.printStackTrace();
+            
+            throw e;
+        }
         
         
         FacesContext.getCurrentInstance().addMessage(null, message);
+        PrimeFaces.current().ajax().addCallbackParam("itemAdded", itemAdded);
         /*
         if (dropdown != null) {
             String key = dropdown.getDiscount();

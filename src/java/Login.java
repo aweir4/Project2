@@ -45,6 +45,10 @@ public class Login implements Serializable {
         
         
     }
+    
+    public String getRole() {
+        return role;
+    }
 
     public String getLogin() {
         return login;
@@ -133,8 +137,8 @@ public class Login implements Serializable {
       //  Util.invalidateUserSession();
         if(role.equalsIgnoreCase("admin"))
             return "admin";
-        if(role.equalsIgnoreCase("employee"))
-            return "employee";
+        /*if(role.equalsIgnoreCase("employee"))
+            return "employee";*/
         return "success";
     }
 }
