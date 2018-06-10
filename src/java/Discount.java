@@ -21,6 +21,10 @@ public class Discount implements Serializable {
     private double percentage;
     private Date startDate;
     private Date endDate;
+    
+    // Added default constructor for simplicity
+    public Discount() {
+    }
 
     public Discount(int id, double percentage, Date startDate, Date endDate) {
         this.id = id;
