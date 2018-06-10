@@ -33,13 +33,46 @@ import java.util.List;
 @SessionScoped
 public class ShoppingCart implements Serializable {
     private List<Item> items = new ArrayList<>();
+    private Map<Integer, Integer> itemCounts = new HashMap<>();
     
     public List<Item> getItems() {
         return items;
     }
     
     public void addItem(Item item) {
-        items.add(item);
+        // Adding item for first time
+        if (!itemCounts.containsKey(item.id)) {
+            items.add(item);
+            itemCounts.put(item.id, 1);
+        }
+        // adding item
+        else {
+            Integer itemCount = itemCounts.get(item.id);
+            itemCounts.replace(item.id, itemCount + 1);
+        }
     }
     
+    public void removeItem(Item item) {
+        Integer itemCount = itemCounts.get(item.id);
+        
+        if (itemCount != null) {
+            if (itemCount == 1) {
+                itemCounts.remove(item.id);
+                items.remove(item);
+            }
+            else {
+                itemCounts.replace(item.id, itemCount - 1);
+            }
+        }
+    }
+    
+    public double getItemTotal(Item item) {
+        Integer itemCount = itemCounts.get(item.id);
+        
+        return item.getPurchasePrice() * itemCount;
+    }
+    
+    public int getCount(Item item) {
+        return itemCounts.get(item.id);
+    }
 }

@@ -11,6 +11,7 @@
     </h:head>
     <h:body>
         <h:form>
+            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
             <p:dataScroller value="#{shoppingcart.items}" var="item" chunkSize="10" mode="inline" scrollHeight="500">
                 <f:facet name="header">
                     Scroll Down to Load More Items
@@ -20,20 +21,35 @@
                     <p:graphicImage value="#{item.image}" stream="false" width="250" /> 
 
                     <p:outputPanel>
-                        <h:panelGrid columns="2" cellpadding="5">
-                            <h:outputText value="Id:" />
-                            <h:outputText value="#{item.id}" style="font-weight: bold"/>
+                        <h:panelGrid id="itemPanel" columns="2" cellpadding="5">
 
                             <h:outputText value="Name:" />
                             <h:outputText value="#{item.name}" style="font-weight: bold"/>
 
                             <h:outputText value="Category:" />
                             <h:outputText value="#{item.category}" style="font-weight: bold"/>
+
+                            <h:outputText value="Description:" />
+                            <h:outputText value="#{item.description}" style="font-weight: bold"/>    
+                            
+                            <h:outputText value="Cost:" />
+                            <h:outputText value="$#{shoppingcart.getItemTotal(item)}" style="font-weight: bold"/>                             
+                            
+                            <h:outputText value="Count: " />
+                            <h:outputText value="#{shoppingcart.getCount(item)}" style="font-weight: bold"/>
+
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Add" action="#{shoppingcart.addItem(item)}" update="itemPanel" />
+                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemPanel" />
+                            </f:facet>                             
+                            
                         </h:panelGrid>
                     </p:outputPanel>
                 </h:panelGrid>
                 <p:separator />
             </p:dataScroller>
+            <p:commandButton value="Checkout" action="#{shoppingcart.addItem(item)}" update="growl" />
         </h:form>
     </h:body>
 </html>

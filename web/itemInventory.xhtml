@@ -10,7 +10,7 @@
         <h1>Items</h1>
     </h:head>
     <h:body>
-        <h:link value="View Cart?" outcome="shoppingCart"/>
+        <h:link value="View Cart?" outcome="shoppingCart?faces-redirect=true"/>
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"

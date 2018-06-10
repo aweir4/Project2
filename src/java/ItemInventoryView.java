@@ -128,9 +128,16 @@ public class ItemInventoryView implements Serializable {
                 selectedItem.setDiscount(0);
             }
             else {
+                System.out.println("Discount is not null!!!");
                 Date now = new Date();
                 Date startDate = discount.getStartDate();
+                System.out.println("Discount start date: " + String.valueOf(startDate));
                 Date endDate = discount.getEndDate();
+                System.out.println("Discount end date: " + String.valueOf(endDate));
+                
+                
+                System.out.println("start date compare: " + String.valueOf(startDate.compareTo(now)));
+                System.out.println("end date compare: " + String.valueOf(endDate.compareTo(now)));
                 
                 if ((startDate.compareTo(now) <= 0) && (endDate.compareTo(now) > 0)) {
                     selectedItem.setDiscountId(discount.getId());
