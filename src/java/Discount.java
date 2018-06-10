@@ -45,7 +45,7 @@ public class Discount implements Serializable {
         this.percentage = percentage;
     }
 
-    public Date getStarDate() {
+    public Date getStartDate() {
         return startDate;
     }
 

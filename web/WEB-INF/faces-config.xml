@@ -19,7 +19,11 @@
         <managed-property>
             <property-name>categoryDropdown</property-name>
             <value>#{categorydropdown}</value>        
-        </managed-property>              
+        </managed-property>  
+        <managed-property>
+            <property-name>shoppingCart</property-name>
+            <value>#{shoppingcart}</value>        
+        </managed-property>                     
     </managed-bean> 
      <managed-bean>
         <managed-bean-name>itemservice</managed-bean-name>
@@ -36,6 +40,11 @@
         <managed-bean-class>DiscountDropdown</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>shoppingcart</managed-bean-name>
+        <managed-bean-class>ShoppingCart</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
     <managed-bean>
         <managed-bean-name>itemimage</managed-bean-name>
         <managed-bean-class>ItemImage</managed-bean-class>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <!--link href="css/stylesheet.css" rel="stylesheet" type="text/css" /-->
+        <title>Shopping Cart</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:dataScroller value="#{shoppingcart.items}" var="item" chunkSize="10" mode="inline" scrollHeight="500">
+                <f:facet name="header">
+                    Scroll Down to Load More Items
+                </f:facet>
+
+                <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                    <p:graphicImage value="#{item.image}" stream="false" width="250" /> 
+
+                    <p:outputPanel>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <h:outputText value="Id:" />
+                            <h:outputText value="#{item.id}" style="font-weight: bold"/>
+
+                            <h:outputText value="Name:" />
+                            <h:outputText value="#{item.name}" style="font-weight: bold"/>
+
+                            <h:outputText value="Category:" />
+                            <h:outputText value="#{item.category}" style="font-weight: bold"/>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </h:panelGrid>
+                <p:separator />
+            </p:dataScroller>
+        </h:form>
+    </h:body>
+</html>

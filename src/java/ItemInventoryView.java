@@ -53,6 +53,9 @@ public class ItemInventoryView implements Serializable {
     @ManagedProperty("#{categorydropdown}")
     private CategoryDropdown categoryDropdown;
     
+    //@ManagedProperty("#{shoppingcart}")
+    private ShoppingCart shoppingCart;    
+    
     //@ManagedProperty("#{discountdropdown}")
     //private DiscountDropdown dropdown;
     
@@ -85,6 +88,10 @@ public class ItemInventoryView implements Serializable {
     
     public void setService(ItemService service) {
         this.service = service;
+    }
+    
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
     
     public CategoryDropdown getCategoryDropdown() {
@@ -155,6 +162,11 @@ public class ItemInventoryView implements Serializable {
         PrimeFaces.current().ajax().addCallbackParam("itemUpdated", itemUpdated);        
        
         //System.out.println("Discount percent! : " + String.valueOf(dropdown.getDiscount().getPercentage()));
+    }
+    
+    public void addToCart(final ActionEvent ae) {
+        System.out.println("Item Added to cart!!!");
+        shoppingCart.addItem(selectedItem);
     }
     
     public void addNewItem(final ActionEvent ae) throws SQLException {

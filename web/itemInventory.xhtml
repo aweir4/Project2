@@ -5,15 +5,16 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"> 
     <h:head>
-        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <!--link href="css/stylesheet.css" rel="stylesheet" type="text/css" /-->
          <title>Item Inventory</title>
         <h1>Items</h1>
     </h:head>
     <h:body>
+        <h:link value="View Cart?" outcome="shoppingCart"/>
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"
-                         tableStyle="width:auto"
+                         
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15"
                          selectionMode="single"
@@ -39,7 +40,7 @@
                 </p:column>                
                             
                 <p:column headerText="Image">     
-                    <p:graphicImage value="#{item.image}" stream="false" />
+                    <p:graphicImage value="#{item.image}" stream="false" class="itemTableImage" style="align:center" width="130" height="65"/>
                 </p:column>
                 
                 <p:column headerText="Description">
@@ -174,8 +175,8 @@
                         <h:message for="viewItemDescription" style="color:red;margin:8px;"/>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Add to Cart" actionListener="#{iteminventoryview.addNewItem}" update="growl" 
-                                             oncomplete="handleAddRequest(xhr, status, args)" />
+                            <p:commandButton value="Add to Cart" actionListener="#{iteminventoryview.addToCart}" update="growl" 
+                                             oncomplete="handleAddToCartRequest(xhr, status, args)" />
                         </f:facet>                          
 
                     </p:panelGrid>
@@ -267,7 +268,17 @@
                   //$('#loginLink').fadeOut();
               }
           }
-          
+
+          function handleAddToCartRequest(xhr, status, args) {
+              if(args.validationFailed) { //|| !args.itemAdded) {
+                  PF('viewItemDialog').jq.effect("shake", {times:5}, 100);
+              }
+              else {
+                  PF('viewItemDialog').hide();
+                  //$('#loginLink').fadeOut();
+              }
+          }
+    
           function handleUpdateRequest(xhr, status, args) {
               if(args.validationFailed || !args.itemUpdated) {
                   PF('itemDialog').jq.effect("shake", {times:5}, 100);

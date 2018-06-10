@@ -31,10 +31,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-/**
- *
- * @author austinweir
- */
 
 @Named(value="discountdropdown")
 @ManagedBean
@@ -86,6 +82,12 @@ public class DiscountDropdown implements Serializable {
             return;
         }
 
+    }
+    
+    public void addDiscount(Discount discount) {
+        String key = String.valueOf(discount.getId() + ": " + String.valueOf(discount.getPercentage() + "%"));
+        discountObjects.put(key, discount);
+        discounts.add(key);
     }
     
     public ArrayList<String> getDiscounts() {
