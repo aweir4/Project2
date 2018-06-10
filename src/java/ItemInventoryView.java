@@ -122,7 +122,7 @@ public class ItemInventoryView implements Serializable {
             }
             else {
                 Date now = new Date();
-                Date startDate = discount.getStarDate();
+                Date startDate = discount.getStartDate();
                 Date endDate = discount.getEndDate();
                 
                 if ((startDate.compareTo(now) <= 0) && (endDate.compareTo(now) > 0)) {
@@ -189,7 +189,7 @@ public class ItemInventoryView implements Serializable {
             }
             else {
                 Date now = new Date();
-                Date startDate = discount.getStarDate();
+                Date startDate = discount.getStartDate();
                 Date endDate = discount.getEndDate();
                 
                 if ((startDate.compareTo(now) <= 0) && (endDate.compareTo(now) > 0)) {
