@@ -184,9 +184,11 @@ public class ItemService {
         }
         con.setAutoCommit(false);        
  
+        System.out.println("ATTEMPTING TO UPDATE!!!");
+        
         Statement statement = con.createStatement();
         String query = "UPDATE Items SET itemName = ?, itemDescription = ?, itemCategory = ?, " 
-                + "itemDiscount = ?, itemImage = ?, itemPrice = ?, itemStock = ? WHERE itemId = ?";
+                + "itemDiscount = ?, itemImage = ?, itemPrice = ?, itemStock = ? WHERE itemId = ?;";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         
         preparedStatement.setString(1, item.name);
@@ -199,6 +201,11 @@ public class ItemService {
         preparedStatement.setInt(8, item.id);
         
         int affectedRows = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        con.commit();
+        con.close();
+        
+        System.out.println("Affected Rows!!!: " + String.valueOf(affectedRows));
                 
         return affectedRows > 0;
     }

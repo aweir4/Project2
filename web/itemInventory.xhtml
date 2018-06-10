@@ -26,15 +26,15 @@
                         oncomplete="if (#{login.role.equals('employee')}) {PF('itemDialog').show()} else {PF('viewItemDialog').show()}"/>
                 <!--p:ajax event="rowSelect" listener="" update=":viewForm:viewItem" oncomplete="PF('viewItemDialog').show()"/-->
                 
-                <p:column headerText="Id" rendered="#{login.role.equals('employee')}" >
+                <p:column headerText="Id" rendered="#{login.role.equals('employee')}" sortBy="#{item.id}" filterBy="#{item.id}" >
                     <h:outputText value="#{item.id}" />
                 </p:column>
 
-                <p:column headerText="Name">
+                <p:column headerText="Name" sortBy="#{item.name}" filterBy="#{item.name}">
                     <h:outputText value="#{item.name}" />
                 </p:column>
 
-                <p:column headerText="Category">
+                <p:column headerText="Category" sortBy="#{item.category}" filterBy="#{item.category}">
                     <h:outputText value="#{item.category}" />
                 </p:column>                
                             
@@ -46,15 +46,15 @@
                     <h:outputText value="#{item.description}" />
                 </p:column>                
                 
-                <p:column headerText="Discount">
+                <p:column headerText="Discount" sortBy="#{item.discount}" filterBy="#{item.discount}">
                     <h:outputText value="#{item.discount}" />
                 </p:column>                
 
-                <p:column headerText="Price">
+                <p:column headerText="Price" sortBy="#{item.price}" filterBy="#{item.price}">
                     <h:outputText value="#{item.price}" />
                 </p:column>  
                 
-                <p:column headerText="Stock">
+                <p:column headerText="Stock" sortBy="#{item.stock}" filterBy="#{item.stock}">
                     <h:outputText value="#{item.stock}" />
                 </p:column>  
                 
@@ -193,15 +193,18 @@
                         </f:facet>
 
                         <h:outputText value="Name:" />
-                        <h:inputText value="#{iteminventoryview.newItem.name}" 
+                        <h:inputText value="#{iteminventoryview.newItem.name}"
                                      id="newItemName"
                                      required="true"
-                                     requiredMessage="You must enter a name for this item" />
+                                     requiredMessage="You must enter a name for this item">
+                            <p:ajax event="blur" listener="#{iteminventoryview.setNewName}"/>
+                        </h:inputText>
                         <h:message for="newItemName" style="color:red;margin:8px;"/>
 
                         <h:outputText value="Category:" />
                         <p:selectOneMenu id="newItemCategory" value="#{iteminventoryview.newItem.category}" required="true"
                                          requiredMessage="You must select a category for this item" >
+                            <p:ajax listener="#{iteminventoryview.setNewCategory()}"/>
                             <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{iteminventoryview.categoryDropdown.categories}"/>
                         </p:selectOneMenu>
@@ -240,12 +243,12 @@
 
                         <h:outputText value="Upload Image:"/>
                         <p:fileUpload fileUploadListener="#{iteminventoryview.handleAddFileUpload}" mode="advanced" required="true"
-                                      requiredMessage="You must upload an image for this item" id="newItemImage" update="addItemImage"
+                                      requiredMessage="You must upload an image for this item" id="newItemImage" update="addItemImage, growl"
                                        auto="true" sizeLimit="100000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
                         <h:message for="newItemImage" style="color:red;margin:8px;"/>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Update" actionListener="#{iteminventoryview.addNewItem}" update="growl, :form:itemTable"
+                            <p:commandButton value="Add Item" actionListener="#{iteminventoryview.addNewItem}" update="growl, :form:itemTable"
                                              oncomplete="handleAddRequest(xhr, status, args)" />
                         </f:facet>                          
 

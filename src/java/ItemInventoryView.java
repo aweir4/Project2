@@ -231,7 +231,7 @@ public class ItemInventoryView implements Serializable {
     }
     
     public void handleUpdateFileUpload(FileUploadEvent event) throws IOException {
-        //FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = null;//new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         UploadedFile uploadedFile = event.getFile();
         String uploadedName = event.getFile().getFileName();
         String fileExtension = uploadedName.substring(uploadedName.lastIndexOf('.'), uploadedName.length());
@@ -257,8 +257,28 @@ public class ItemInventoryView implements Serializable {
         }
     }  
     
+    public void setNewName() {
+        //System.out.println("NEW NAME!!!: " + String.valueOf(newItem.name));
+    }
+    
+    public void setNewCategory() {
+        //System.out.println("NEW CATEGORY!!!: " + newItem.category);
+    }
+    
      public void handleAddFileUpload(FileUploadEvent event) throws IOException {
-        //FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = null;//new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        
+        if (newItem.getName() == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Image Upload Error", "You must set the name for this item first!");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        else if (newItem.getCategory() == null) {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Image Upload Error", "You must select a category for this item first!");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            return;
+        }
+        
         UploadedFile uploadedFile = event.getFile();
         String uploadedName = event.getFile().getFileName();
         String fileExtension = uploadedName.substring(uploadedName.lastIndexOf('.'), uploadedName.length());
@@ -277,11 +297,14 @@ public class ItemInventoryView implements Serializable {
             newItem.setImageName(fileName + fileExtension);
             newItem.setImage(imageStream);
             newItem.setImagePath(filePath);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Image Uploaded!", "The image was successfully uploaded");
         } catch(Exception e) {
             System.out.println("Error attempting to save the image to disk!!!");
             System.out.println(e.toString());
             e.printStackTrace();
+            return;
         }
+        FacesContext.getCurrentInstance().addMessage(null, message);
     } 
     
     
