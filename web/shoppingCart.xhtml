@@ -14,7 +14,7 @@
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
             <p:dataScroller value="#{shoppingcart.items}" var="item" chunkSize="10" mode="inline" scrollHeight="500">
                 <f:facet name="header">
-                    Scroll Down to Load More Items
+                    #{login.currentCustomer.login}'s Items
                 </f:facet>
 
                 <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">

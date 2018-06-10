@@ -38,7 +38,7 @@ public class Login implements Serializable {
     private DBConnect dbConnect = new DBConnect();
     private CurrentCustomer currentCustomer;
     
-    private class CurrentCustomer {
+    public class CurrentCustomer implements Serializable {
         public String login;
         public String cardNumber;
         public Date cardExpiration;
@@ -51,6 +51,26 @@ public class Login implements Serializable {
             this.cardExpiration = cardExpiration;
             this.address = address;
             this.email = email;
+        }
+        
+        public String getLogin() {
+            return login;
+        }
+        
+        public String getCardNumber() {
+            return cardNumber;
+        }
+        
+        public Date getCardExpiration() {
+            return cardExpiration;
+        }
+        
+        public String getAddress() {
+            return address;
+        }
+        
+        public String getEmail() {
+            return email;
         }
     }
     
