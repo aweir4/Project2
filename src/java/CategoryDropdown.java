@@ -58,6 +58,10 @@ public class CategoryDropdown implements Serializable {
 
     }
     
+    public void addCategory(String category) {
+        categories.add(category);
+    }
+    
     public ArrayList<String> getCategories() {
         return categories;
     }
