@@ -16,8 +16,9 @@ and open the template in the editor.
         <title>Settings</title>
     </h:head>
     <h:body>
-        <tp:navBar link1 = "/faces/start.xhtml" userName = "#{login.login}"
-                       settingsLink = "/faces/settings.xhtml" 
+        <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
+                       settingsLink = "/faces/settings.xhtml"
+                       cartLink ="shoppingCart?faces-redirect=true"
                        logoutButtonAction = "#{login.logout}" />
         <h:form id="settingsForm">            
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />

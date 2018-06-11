@@ -126,10 +126,12 @@
         <navigation-case>
             <from-outcome>discounts</from-outcome>
             <to-view-id>/discounts.xhtml</to-view-id>
+           
         </navigation-case>
         <navigation-case>
             <from-outcome>categories</from-outcome>
             <to-view-id>/category.xhtml</to-view-id>
+            
         </navigation-case>
     </navigation-rule> 
     
