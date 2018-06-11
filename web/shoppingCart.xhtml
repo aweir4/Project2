@@ -9,6 +9,11 @@
     <h:head>
         <!--link href="css/stylesheet.css" rel="stylesheet" type="text/css" /-->
         <title>Shopping Cart</title>
+        <style type="text/css">
+        ui-helper-hidden {
+            display: none;
+        }
+        </style>           
     </h:head>
     <h:body>
         <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
@@ -49,7 +54,7 @@
                                                  disabled="#{shoppingcart.disableAdd}"
                                                  actionListener="#{shoppingcart.addItem(item)}" update="itemPanel">
                                 </p:commandButton>
-                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemsForm" />
+                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemsForm, :itemsForm:cB" />
                             </f:facet>                             
                             
                         </h:panelGrid>
@@ -57,7 +62,7 @@
                 </h:panelGrid>
                 <p:separator />
             </p:dataScroller>
-            <p:commandButton value="Checkout" update="growl, :checkoutForm:checkoutPanel"
+            <p:commandButton id="cB" value="Checkout" update="growl, :checkoutForm:checkoutPanel" rendered="#{shoppingcart.items.size() > 0}"
                              onclick="PF('checkoutDialog').show();" />
         </h:form>
         
