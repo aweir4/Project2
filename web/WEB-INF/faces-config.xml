@@ -74,6 +74,11 @@
         <managed-bean-name>customerInfo</managed-bean-name>
         <managed-bean-class>CustomerInfo</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>cart</managed-bean-name>
+        <managed-bean-class>Cart</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>  
     <navigation-rule>
         <from-view-id>
@@ -81,7 +86,7 @@
         </from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
-            <to-view-id>/start.xhtml</to-view-id>
+            <to-view-id>/itemInventory.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule> 
     

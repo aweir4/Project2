@@ -26,10 +26,13 @@ h4 { margin: 10px 0 }
     width: 200px;
 }
 
-/*.sixty-percent {
-    width: 200px;
-}*/
+.widthLenItem {
+    width: 350px;
+}
 
+.widthItemPrice {
+    width: 100px;
+}
 .ten-percent {
     width : 50px;
 }
