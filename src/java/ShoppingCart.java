@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.el.ELContext;
+import org.primefaces.PrimeFaces;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -90,26 +91,59 @@ public class ShoppingCart implements Serializable {
         Connection con = dbConnect.getConnection();
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "login");
+        boolean orderSuccess = false;
         
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
-        String query = "INSERT INTO Orders(saleDate, purchaser, shippingAddress)"
+        String query = "INSERT INTO Orders(saleDate, purchaser, shippingAddress) "
                 + "VALUES(?,?,?) RETURNING orderId";
         
         PreparedStatement preparedStatement = con.prepareStatement(query);
         // Current Date
         preparedStatement.setDate(1, new java.sql.Date((new Date()).getTime()));
-        preparedStatement.setString(2, query);
+        preparedStatement.setString(2, login.getCurrentCustomer().login);
+        preparedStatement.setString(3, login.getCurrentCustomer().address);
+        ResultSet results = preparedStatement.executeQuery();
+        
+        results.next();
+        int orderId = results.getInt(1);
+        int ordinal = 0;
+        
+        for (Item item : items) {
+            query = "INSERT INTO OrderItems(orderId, ordinal, item) "
+                    + "VALUES(?,?,?)";
+            
+            preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, orderId);
+            preparedStatement.setInt(2, ordinal);
+            preparedStatement.setInt(3, item.id);
+            
+            preparedStatement.execute();
+            
+            ordinal += 1;
+        }
+        
+        query = "INSERT INTO Bills(orderId, total, paid) "
+                + "VALUES(?,?,?)";
+        preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, orderId);
+        preparedStatement.setDouble(2, cartTotal);
+        preparedStatement.setBoolean(3, true);
+        
+        preparedStatement.execute();
+        
+        orderSuccess = true;
+        
+        preparedStatement.close();
+        con.commit();
+        con.close();
         
         
-        
-        
-        
-        
-        
-        
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Order Completed!", "Your order has been successfully placed");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        PrimeFaces.current().ajax().addCallbackParam("orderSuccess", orderSuccess);
 /*
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setString(1, newItem.name);
