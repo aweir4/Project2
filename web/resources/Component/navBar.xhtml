@@ -37,10 +37,10 @@ and open the template in the editor.
                     <p:menuitem value="Logout" icon="ui-icon-extlink"
                                 action="#{cc.attrs.logoutButtonAction}"/>
                 </p:submenu>
-                <p:submenu label="Add" 
+                <p:submenu label="Modify" 
                            style="float: right; padding:5px"
                            icon="ui-icon-penci"
-                           rendered="${login.login eq 'employee'}">
+                           rendered="${login.role eq 'employee'}">
                     <p:menuitem value="Category" 
                                 icon="ui-icon-grip-solid-horizontal"
                                 outcome="${cc.attrs.categoryLink}"/>
