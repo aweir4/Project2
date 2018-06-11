@@ -205,8 +205,6 @@ public class Login implements Serializable {
       //  Util.invalidateUserSession();
         if(role.equalsIgnoreCase("admin"))
             return "admin";
-        /*if(role.equalsIgnoreCase("employee"))
-            return "employee";*/
         return "success";
     }
 }

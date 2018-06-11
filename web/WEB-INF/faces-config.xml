@@ -83,6 +83,11 @@
         <managed-bean-name>customerInfo</managed-bean-name>
         <managed-bean-class>CustomerInfo</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>cart</managed-bean-name>
+        <managed-bean-class>Cart</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>  
     <managed-bean>
         <managed-bean-name>admin</managed-bean-name>
