@@ -119,14 +119,16 @@ public class DiscountPage implements Serializable {
         Statement statement = con.createStatement();
         try {
             PreparedStatement preparedStatement = con.prepareStatement("Insert into discounts "
-                    + "(discountPercentage, startDate, endDate) values(?,?,?)");
+                    + "(discountPercentage, startDate, endDate) values(?,?,?) RETURNING discountId");
             preparedStatement.setDouble(1, this.tempDiscount.getPercentage());
             preparedStatement.setDate(2, new java.sql.Date(this.tempDiscount.getStartDate().getTime()));
             preparedStatement.setDate(3, new java.sql.Date(this.tempDiscount.getEndDate().getTime()));
-            preparedStatement.executeUpdate();
+            ResultSet results = preparedStatement.executeQuery();
             statement.close();
             con.commit();
             con.close();
+            results.next();
+            this.tempDiscount.setId(results.getInt(1));
             ELContext elContext = FacesContext.getCurrentInstance().getELContext();
             DiscountDropdown dropdown = (DiscountDropdown) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "discountdropdown");
             dropdown.addDiscount(this.tempDiscount);
