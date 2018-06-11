@@ -10,7 +10,7 @@
         <title>Shopping Cart</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="itemsForm">
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
             <p:dataScroller value="#{shoppingcart.items}" var="item" chunkSize="10" mode="inline" scrollHeight="500">
                 <f:facet name="header">
@@ -49,7 +49,22 @@
                 </h:panelGrid>
                 <p:separator />
             </p:dataScroller>
-            <p:commandButton value="Checkout" action="#{shoppingcart.addItem(item)}" update="growl" />
+            <p:commandButton value="Checkout" update="growl, :checkoutForm:checkoutPanel"
+                             onclick="PF('checkoutDialog').show();" />
         </h:form>
+        
+        <p:dialog header="Checkout" widgetVar="checkoutDialog" modal="true" height="100">
+            <h:form id="checkoutForm">
+                <h:panelGrid id="checkoutPanel" columns="2" cellpadding="5">
+                    <h:outputText value="Total Cost:" />
+                    <h:outputText value="$#{shoppingcart.cartTotal}" style="font-weight: bold"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Place Order" action="#{shoppingcart.addItem(item)}" />
+                    </f:facet>                 
+
+                </h:panelGrid> 
+            </h:form>    
+        </p:dialog>        
     </h:body>
 </html>

@@ -166,7 +166,8 @@ public class ItemService {
         preparedStatement.setInt(7, newItem.stock);
         //preparedStatement.executeUpdate();
         ResultSet results = preparedStatement.executeQuery();
-        statement.close();
+        //statement.close();
+        preparedStatement.close();
         con.commit();
         con.close();
         
