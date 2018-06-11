@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <!--link href="css/stylesheet.css" rel="stylesheet" type="text/css" /-->
+        <title>Shopping Cart</title>
+    </h:head>
+    <h:body>
+        <h:form id="itemsForm">
+            <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+            <p:dataScroller value="#{shoppingcart.items}" var="item" chunkSize="10" mode="inline" scrollHeight="500">
+                <f:facet name="header">
+                    #{login.currentCustomer.login}'s Items
+                </f:facet>
+
+                <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                    <p:graphicImage value="#{item.image}" stream="false" width="250" /> 
+
+                    <p:outputPanel>
+                        <h:panelGrid id="itemPanel" columns="2" cellpadding="5">
+
+                            <h:outputText value="Name:" />
+                            <h:outputText value="#{item.name}" style="font-weight: bold"/>
+
+                            <h:outputText value="Category:" />
+                            <h:outputText value="#{item.category}" style="font-weight: bold"/>
+
+                            <h:outputText value="Description:" />
+                            <h:outputText value="#{item.description}" style="font-weight: bold"/>    
+                            
+                            <h:outputText value="Cost:" />
+                            <h:outputText value="$#{shoppingcart.getItemTotal(item)}" style="font-weight: bold"/>                             
+                            
+                            <h:outputText value="Count: " />
+                            <h:outputText value="#{shoppingcart.getCount(item)}" style="font-weight: bold"/>
+
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Add" action="#{shoppingcart.addItem(item)}" update="itemPanel" />
+                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemPanel" />
+                            </f:facet>                             
+                            
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </h:panelGrid>
+                <p:separator />
+            </p:dataScroller>
+            <p:commandButton value="Checkout" update="growl, :checkoutForm:checkoutPanel"
+                             onclick="PF('checkoutDialog').show();" />
+        </h:form>
+        
+        <p:dialog header="Checkout" widgetVar="checkoutDialog" modal="true" height="100">
+            <h:form id="checkoutForm">
+                <h:panelGrid id="checkoutPanel" columns="2" cellpadding="5">
+                    <h:outputText value="Total Cost:" />
+                    <h:outputText value="$#{shoppingcart.cartTotal}" style="font-weight: bold"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Place Order" action="#{shoppingcart.addItem(item)}" />
+                    </f:facet>                 
+
+                </h:panelGrid> 
+            </h:form>    
+        </p:dialog>        
+    </h:body>
+</html>

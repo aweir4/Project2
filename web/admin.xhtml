@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <title>Admin</title>
+    <h:head>
+<!--        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />-->
+    </h:head>
+    <h:body>
+        <h1 style="text-align: center">Welcome Admin </h1>
+        <p style="text-align: center">
+            You may add/delete employees. Current employees are shown below:
+        </p>
+        <p:commandButton value="Add" type="button" onclick="PF('dlg2').show();" />
+        <h:form id="deleteEmpForm" style="display: inline-block">
+            <p:commandButton value="Remove" id="removeEmp" disabled="#{!admin.isSelected}"
+                       update="tableForm"  actionListener="#{admin.deleteEmployee}" />
+        </h:form>
+        <h:form id="tableForm">
+            <p:dataTable id="empTable" var="employee" value="#{admin.employees}"
+                     selectionMode="single" selection="#{admin.selectedEmployee}"
+                     rowKey="#{employee.userLogin}">
+                 <p:ajax event="rowSelect" update=":deleteEmpForm:removeEmp" listener="#{admin.onRowSelect}" />
+                <p:column headerText="User Login">
+                    <h:outputText value="#{employee.userLogin}" />
+                </p:column>
+ 
+                <p:column headerText="First Name">
+                    <h:outputText value="#{employee.firstName}" />
+                </p:column>
+            
+                <p:column headerText="Last Name">
+                    <h:outputText value="#{employee.lastName}" />
+                </p:column>
+ 
+              </p:dataTable>
+        </h:form>
+        <h:form id="empForm">
+                    <p:dialog header="Add an Employee" id="dlg2" widgetVar="dlg2" modal="true">
+                        <p:ajax event="close" update="empForm" listener="#{admin.handleClose}" />
+                        <h:panelGrid id="grid" columns="3" cellpadding="5">
+                            
+                    <h:outputLabel for="userLogin" value="User Login" style="font-weight:bold"/>
+                    <p:inputText id="userLogin" value="#{admin.tempEmployee.userLogin}" required="true" label="User Login">
+                                        <f:validateLength minimum="3" />
+                    </p:inputText>
+                    <p:message for="userLogin" />
+                    
+                    
+                    <h:outputLabel for="password" value="Password" style="font-weight:bold"/>
+                    <p:password id="password" value="#{admin.tempEmployee.password}" feedback="true"
+                                required="true" inline="true">
+                                 <f:validateLength minimum="2" />
+
+                    </p:password>
+                    <p:message for="password" />
+                    
+                    
+                    <h:outputLabel for="firstName" value="First Name" style="font-weight:bold"/>
+                    <p:inputText id="firstName" value="#{admin.tempEmployee.firstName}" required="true" label="First Name">
+                                                                <f:validateLength minimum="2" />
+                    </p:inputText>
+                    <p:message for="firstName" />
+                    
+                    
+                    <h:outputLabel for="lastName" value="Last Name" style="font-weight:bold"/>
+                    <p:inputText id="lastName" value="#{admin.tempEmployee.lastName}" required="true" label="Last Name">
+                                                                <f:validateLength minimum="2" />
+                    </p:inputText>
+                    <p:message for="lastName" />
+                    
+                    
+<!--                    <h:outputText value="Inline Feedback: " />
+                    <p:password id="inlineFeedback" value="#{passwordView.password4}" feedback="true" inline="true" />-->
+                </h:panelGrid>
+                        <p:commandButton value="Submit" type="submit" update="grid :tableForm:empTable" actionListener="#{admin.addEmployee}"
+                                  />
+                    </p:dialog>
+        </h:form>
+<!--        <p:dialog header="Add an Employee" id="dlg2" widgetVar="dlg2" modal="true">
+            <h:form>
+                
+
+                <p:commandButton update="matchGrid" value="Save" />
+            </h:form>
+        </p:dialog> -->
+    </h:body>
+</html>

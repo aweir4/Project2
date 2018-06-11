@@ -147,4 +147,23 @@ public class Item implements Serializable {
     public void setStock(int stock) {
         this.stock = stock;
     }
+    
+    public double getPurchasePrice() {
+        return price - (price * (discount/100));
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        
+        if (!(o instanceof Item)) {
+            return false;
+        }
+        
+        Item item = (Item) o;
+        
+        return item.id == this.id;
+    }
 }

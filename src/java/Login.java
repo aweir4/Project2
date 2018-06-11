@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
@@ -35,15 +36,58 @@ public class Login implements Serializable {
     private UIInput loginUI;
     private String role = "customer";
     private DBConnect dbConnect = new DBConnect();
+    private CurrentCustomer currentCustomer;
+    
+    public class CurrentCustomer implements Serializable {
+        public String login;
+        public String cardNumber;
+        public Date cardExpiration;
+        public String address;
+        public String email;
+        
+        public CurrentCustomer(String login, String cardNumber, Date cardExpiration, String address, String email) {
+            this.login = login;
+            this.cardNumber = cardNumber;
+            this.cardExpiration = cardExpiration;
+            this.address = address;
+            this.email = email;
+        }
+        
+        public String getLogin() {
+            return login;
+        }
+        
+        public String getCardNumber() {
+            return cardNumber;
+        }
+        
+        public Date getCardExpiration() {
+            return cardExpiration;
+        }
+        
+        public String getAddress() {
+            return address;
+        }
+        
+        public String getEmail() {
+            return email;
+        }
+    }
+    
+    public CurrentCustomer getCurrentCustomer() {
+        return currentCustomer;
+    }
 
     public UIInput getLoginUI() {
         return loginUI;
     }
 
     public void setLoginUI(UIInput loginUI) {
-        this.loginUI = loginUI;
-        
-        
+        this.loginUI = loginUI; 
+    }
+    
+    public String getRole() {
+        return role;
     }
 
     public String getLogin() {
@@ -108,6 +152,10 @@ public class Login implements Serializable {
         role = result.getString("userrole");
         System.out.println("hello i got " + password_actual);
         
+        if (role.equals("customer")) {
+            setCustomer(login);
+        }
+        
         if (!password.equals(password_actual)) {
             FacesMessage errorMessage = new FacesMessage(
                     "Wrong password");
@@ -115,6 +163,30 @@ public class Login implements Serializable {
         } 
         ps.close();
         con.close();
+    }
+    
+    public void setCustomer(String login) throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        String query = "SELECT * FROM CustomerData WHERE customerLogin = '" + login + "'";
+
+        PreparedStatement ps = con.prepareStatement(query);
+
+        ResultSet result = ps.executeQuery();
+        
+        while(result.next()) {
+            String cardNumber = result.getString("cardNumber");
+            Date cardExpiration = result.getDate("cardExpiration");
+            String address = result.getString("address");
+            String email = result.getString("email");
+                    
+            currentCustomer = new CurrentCustomer(login, cardNumber, cardExpiration, address, email);      
+        }
+        result.close();
+        con.close();      
     }
     
     public void logout() {
@@ -133,8 +205,6 @@ public class Login implements Serializable {
       //  Util.invalidateUserSession();
         if(role.equalsIgnoreCase("admin"))
             return "admin";
-//        if(role.equalsIgnoreCase("employee"))
-//            return "employee";
         return "success";
     }
 }

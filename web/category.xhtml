@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <title>Categories</title>
+    <h:head>
+<!--        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />-->
+    </h:head>
+    <h:body>
+        <h1 style="text-align: center">Categories </h1>
+        <p style="text-align: center">
+            You may add/delete categories. Current categories are shown below:
+        </p>
+        <p:commandButton value="Add" type="button" onclick="PF('dlg2').show();" />
+        <h:form id="deleteCategoryForm" style="display: inline-block">
+            <p:commandButton value="Remove" id="removeCategory" disabled="#{!categoryPage.isSelected}"
+                       update="tableForm"  actionListener="#{categoryPage.deleteCategory}" />
+        </h:form>
+        <h:form id="tableForm">
+            <p:dataTable id="categoryTable" var="category" value="#{categoryPage.categories}"
+                     selectionMode="single" selection="#{categoryPage.selectedCategory}"
+                     rowKey="#{category}">
+                <p:ajax event="rowSelect" update=":deleteCategoryForm:removeCategory" listener="#{categoryPage.onRowSelect}" />
+                <p:column headerText="Name">
+                    <h:outputText value="#{category}" />
+                </p:column>
+ 
+              </p:dataTable>
+        </h:form>
+        <h:form id="categoryForm">
+                    <p:dialog header="Add a Category" id="dlg2" widgetVar="dlg2" modal="true">
+                        <p:ajax event="close" update="categoryForm" listener="#{categoryPage.handleClose}" />
+                        <h:panelGrid id="grid" columns="3" cellpadding="5">
+                            
+                            <h:outputLabel for="categoryName" value="Name" style="font-weight:bold"/>
+                            <p:inputText id="categoryName" value="#{categoryPage.tempCategory}" required="true" label="Name">
+                                                                <f:validateLength minimum="3" />
+                            </p:inputText>
+                            <p:message for="categoryName" />
+           
+                        </h:panelGrid>
+                            <p:commandButton value="Submit" type="submit" update="grid :tableForm:categoryTable" actionListener="#{categoryPage.addCategory}"
+                             />
+                    </p:dialog>
+        </h:form>
+    </h:body>
+</html>

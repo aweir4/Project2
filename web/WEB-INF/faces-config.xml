@@ -19,7 +19,11 @@
         <managed-property>
             <property-name>categoryDropdown</property-name>
             <value>#{categorydropdown}</value>        
-        </managed-property>              
+        </managed-property>  
+        <managed-property>
+            <property-name>shoppingCart</property-name>
+            <value>#{shoppingcart}</value>        
+        </managed-property>                     
     </managed-bean> 
      <managed-bean>
         <managed-bean-name>itemservice</managed-bean-name>
@@ -36,6 +40,11 @@
         <managed-bean-class>DiscountDropdown</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>shoppingcart</managed-bean-name>
+        <managed-bean-class>ShoppingCart</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>    
     <managed-bean>
         <managed-bean-name>itemimage</managed-bean-name>
         <managed-bean-class>ItemImage</managed-bean-class>
@@ -80,6 +89,26 @@
         <managed-bean-class>Cart</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>  
+    <managed-bean>
+        <managed-bean-name>admin</managed-bean-name>
+        <managed-bean-class>Admin</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>employee</managed-bean-name>
+        <managed-bean-class>Employee</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>discountPage</managed-bean-name>
+        <managed-bean-class>DiscountPage</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>categoryPage</managed-bean-name>
+        <managed-bean-class>CategoryPage</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean> 
     <navigation-rule>
         <from-view-id>
             /index.xhtml
@@ -87,6 +116,20 @@
         <navigation-case>
             <from-outcome>success</from-outcome>
             <to-view-id>/itemInventory.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>admin</from-outcome>
+            <to-view-id>/admin.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>discounts</from-outcome>
+            <to-view-id>/discounts.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>categories</from-outcome>
+            <to-view-id>/category.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule> 
     
