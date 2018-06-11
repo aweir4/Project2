@@ -35,7 +35,7 @@ and open the template in the editor.
                            icon="ui-icon-person"
                            rendered="${!(login.login eq null)}">
                     <p:menuitem value="Past Orders" icon="ui-icon-clock"
-                                url="${cc.attrs.pastOrdersLink}"
+                                outcome="${cc.attrs.pastOrdersLink}"
                                 rendered="${login.role eq 'customer'}"/>
                     <p:menuitem value="Settings" icon="ui-icon-gear"
                                 url="${cc.attrs.settingsLink}"/>

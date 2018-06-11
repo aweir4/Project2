@@ -19,6 +19,7 @@ and open the template in the editor.
         <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
                        settingsLink = "/faces/settings.xhtml"
                        cartLink ="shoppingCart?faces-redirect=true"
+                       pastOrdersLink="orderHistory?faces-redirect=true"
                        logoutButtonAction = "#{login.logout}" />
         <h:form id="settingsForm">            
             <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
