@@ -29,6 +29,7 @@ and open the template in the editor.
         <h:form id="defNavBar">
             <p:menubar>
                 <p:menuitem value="Home" url="${cc.attrs.homeLink}"
+                            rendered="${!(login.role eq 'admin')}"
                             containerStyle="padding:5px"/>
                 <p:submenu label="${cc.attrs.userName}" 
                            style="float: right; padding:5px"
