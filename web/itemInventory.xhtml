@@ -15,7 +15,6 @@
         </style>        
         
          <title>Item Inventory</title>
-        <h1>Items</h1>
     </h:head>
     <h:body>
         <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
@@ -23,8 +22,8 @@
                        cartLink ="shoppingCart?faces-redirect=true"
                        logoutButtonAction = "#{login.logout}" 
                        categoryLink="category?faces-redirect=true"
-                       discountLink="discounts?faces-redirect=true"/>
-        <h:link value="Past Orders" outcome="orderHistory?faces-redirect=true"/>
+                       discountLink="discounts?faces-redirect=true"
+                       pastOrdersLink="/faces/itemInventory.xhtml"/>
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"
