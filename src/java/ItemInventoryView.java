@@ -66,6 +66,11 @@ public class ItemInventoryView implements Serializable {
         //newItem = new Item();
     }
     
+    public void reInit() {
+        lazyModel = new LazyItemDataModel(service.init());
+        absoluteWebPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");       
+    }
+    
     public LazyDataModel<Item> getLazyModel() {
         return lazyModel;
     }
@@ -107,6 +112,18 @@ public class ItemInventoryView implements Serializable {
         String msgString = "Item ID: " + String.valueOf(item.getId());
         FacesMessage msg = new FacesMessage("Item Selected", msgString);
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public boolean showItem(Item item) {
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "login");   
+        
+        // Don't show out of stock items to customers
+        if (login.getCurrentCustomer() != null) {
+            return item.stock > 0;
+        }
+        
+        return true;
     }
     
     public void updateItem(final ActionEvent ae) {
