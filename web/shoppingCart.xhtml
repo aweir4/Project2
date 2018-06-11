@@ -46,7 +46,7 @@
 
                             <f:facet name="footer">
                                 <p:commandButton value="Add" action="#{shoppingcart.addItem(item)}" update="itemPanel" />
-                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemPanel" />
+                                <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemsForm" />
                             </f:facet>                             
                             
                         </h:panelGrid>
@@ -60,16 +60,31 @@
         
         <p:dialog header="Checkout" widgetVar="checkoutDialog" modal="true" height="100">
             <h:form id="checkoutForm">
+                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
                 <h:panelGrid id="checkoutPanel" columns="2" cellpadding="5">
                     <h:outputText value="Total Cost:" />
                     <h:outputText value="$#{shoppingcart.cartTotal}" style="font-weight: bold"/>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Place Order" action="#{shoppingcart.addItem(item)}" />
+                        <p:commandButton value="Place Order" action="#{shoppingcart.createOrder()}" update="growl"
+                                         oncomplete="handleOrderRequest(xhr, status, args)" />
                     </f:facet>                 
 
                 </h:panelGrid> 
             </h:form>    
-        </p:dialog>        
+        </p:dialog>  
+        
+        <script type="text/javascript">
+          function handleOrderRequest(xhr, status, args) {
+              if(args.validationFailed || !args.orderSuccess) {
+                  PF('checkoutDialog').jq.effect("shake", {times:5}, 100);
+              }
+              else {
+                  PF('checkoutDialog').hide();
+                  //$('#loginLink').fadeOut();
+              }
+          }         
+      </script> 
+        
     </h:body>
 </html>
