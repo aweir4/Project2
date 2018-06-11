@@ -136,21 +136,27 @@ public class ShoppingCart implements Serializable {
         int orderId = results.getInt(1);
         int ordinal = 0;
         
+        
         for (Item item : items) {
-            query = "INSERT INTO OrderItems(orderId, ordinal, item) "
-                    + "VALUES(?,?,?)";
+            int count = itemCounts.get(item.id);
             
+            for (int i=0; i < count; i++) {
+                query = "INSERT INTO OrderItems(orderId, ordinal, item) "
+                       + "VALUES(?,?,?)";
+
+               preparedStatement = con.prepareStatement(query);
+               preparedStatement.setInt(1, orderId);
+               preparedStatement.setInt(2, ordinal);
+               preparedStatement.setInt(3, item.id);
+
+               preparedStatement.execute(); 
+               ordinal += 1;
+            }
+            
+            query = "UPDATE Items SET itemStock = itemStock - ? WHERE itemId = ?";
             preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, orderId);
-            preparedStatement.setInt(2, ordinal);
-            preparedStatement.setInt(3, item.id);
-            
-            preparedStatement.execute();
-            
-            
-            query = "UPDATE Items SET itemStock = itemStock - 1 WHERE itemId = ?";
-            preparedStatement = con.prepareStatement(query);
-            preparedStatement.setInt(1, item.id);
+            preparedStatement.setInt(1, count);
+            preparedStatement.setInt(2, item.id);
             
             int affectedRows = preparedStatement.executeUpdate();
             
@@ -161,8 +167,6 @@ public class ShoppingCart implements Serializable {
                 PrimeFaces.current().ajax().addCallbackParam("orderSuccess", orderSuccess); 
                 return;                
             }
-
-            ordinal += 1;
         }
         
         query = "INSERT INTO Bills(orderId, total, paid) "
