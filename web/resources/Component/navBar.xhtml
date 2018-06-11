@@ -39,7 +39,7 @@ and open the template in the editor.
                                 rendered="${login.role eq 'customer'}"/>
                     <p:menuitem value="Settings" icon="ui-icon-gear"
                                 url="${cc.attrs.settingsLink}"
-                                rendered="${login.role eq 'employee'}"/>
+                                rendered="${!(login.role eq 'employee')}"/>
                     <p:menuitem value="Logout" icon="ui-icon-extlink"
                                 action="#{cc.attrs.logoutButtonAction}"/>
                 </p:submenu>
