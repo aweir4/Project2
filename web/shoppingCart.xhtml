@@ -61,7 +61,7 @@
                     <h:outputText value="$#{shoppingcart.cartTotal}" style="font-weight: bold"/>
 
                     <f:facet name="footer">
-                        <p:commandButton value="Place Order" action="#{shoppingcart.createOrder()}" update="growl"
+                        <p:commandButton value="Place Order" action="#{shoppingcart.createOrder()}" update="growl, :itemsForm"
                                          oncomplete="handleOrderRequest(xhr, status, args)" />
                     </f:facet>                 
 

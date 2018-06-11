@@ -66,6 +66,11 @@ public class ItemInventoryView implements Serializable {
         //newItem = new Item();
     }
     
+    public void reInit() {
+        lazyModel = new LazyItemDataModel(service.init());
+        absoluteWebPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");       
+    }
+    
     public LazyDataModel<Item> getLazyModel() {
         return lazyModel;
     }

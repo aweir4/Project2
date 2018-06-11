@@ -91,12 +91,27 @@ public class ShoppingCart implements Serializable {
         Connection con = dbConnect.getConnection();
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "login");
+        ItemInventoryView itemInventory = (ItemInventoryView) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "iteminventoryview");
         boolean orderSuccess = false;
         
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
+        
+        try {
+            
+        } catch(Exception e) {
+            System.out.println("Error attempting to add order to the database!!!");
+            System.out.println(e.toString());
+            e.printStackTrace();
+            orderSuccess = false;
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Order Error!", e.toString());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+            PrimeFaces.current().ajax().addCallbackParam("orderSuccess", orderSuccess); 
+            return;
+        }
+        
         String query = "INSERT INTO Orders(saleDate, purchaser, shippingAddress) "
                 + "VALUES(?,?,?) RETURNING orderId";
         
@@ -122,6 +137,21 @@ public class ShoppingCart implements Serializable {
             
             preparedStatement.execute();
             
+            
+            query = "UPDATE Items SET itemStock = itemStock - 1 WHERE itemId = ?";
+            preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, item.id);
+            
+            int affectedRows = preparedStatement.executeUpdate();
+            
+            if (affectedRows == 0) {
+                orderSuccess = false;
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Order Error!", "Error attempting to update itemInventory!");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                PrimeFaces.current().ajax().addCallbackParam("orderSuccess", orderSuccess); 
+                return;                
+            }
+
             ordinal += 1;
         }
         
@@ -140,26 +170,12 @@ public class ShoppingCart implements Serializable {
         con.commit();
         con.close();
         
+        itemInventory.reInit();
+        items.clear();
+        itemCounts.clear();
         
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Order Completed!", "Your order has been successfully placed");
         FacesContext.getCurrentInstance().addMessage(null, message);
         PrimeFaces.current().ajax().addCallbackParam("orderSuccess", orderSuccess);
-/*
-        PreparedStatement preparedStatement = con.prepareStatement(query);
-        preparedStatement.setString(1, newItem.name);
-        preparedStatement.setString(2, newItem.description);
-        preparedStatement.setString(3, newItem.category);
-        preparedStatement.setInt(4, newItem.discountId);
-        preparedStatement.setString(5, newItem.imageName);
-        preparedStatement.setDouble(6, newItem.price);
-        preparedStatement.setInt(7, newItem.stock);
-        //preparedStatement.executeUpdate();
-        ResultSet results = preparedStatement.executeQuery();
-        statement.close();
-        con.commit();
-        con.close();
-        
-        results.next();
-        return results.getInt(1);        */
-    }
+    } 
 }
