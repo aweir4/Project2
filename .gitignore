@@ -17,3 +17,7 @@ nb-configuration.xml
 
 # other file
 src/java/DBConnect.java
+
+# dependencies
+!primefaces-6.2.jar
+!le-frog-1.0.10.jar
