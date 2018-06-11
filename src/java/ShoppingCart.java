@@ -57,9 +57,9 @@ public class ShoppingCart implements Serializable {
         // adding item
         else {
             Integer itemCount = itemCounts.get(item.id);
-            if(itemCount >= item.stock) {
+            if(itemCount == item.stock - 1) {
                 disableAdd=true;
-                return;
+                //return;
             } 
             itemCounts.replace(item.id, itemCount + 1);
         }

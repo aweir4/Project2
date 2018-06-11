@@ -13,9 +13,7 @@
             display: none;
         }
         </style>        
-        
          <title>Item Inventory</title>
-        <h1>Items</h1>
     </h:head>
     <h:body>
         <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
@@ -27,6 +25,7 @@
         <h:link value="Past Orders" outcome="orderHistory?faces-redirect=true"/>
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
+                         style="width:100%;"
                          paginator="true"
                          rowStyleClass="#{iteminventoryview.showItem(item) ? '' : 'ui-helper-hidden'}"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -62,11 +61,11 @@
                 </p:column>                
                 
                 <p:column headerText="Discount" sortBy="#{item.discount}" filterBy="#{item.discount}">
-                    <h:outputText value="#{item.discount}" />
+                    <h:outputText value="#{item.discount}%" />
                 </p:column>                
 
                 <p:column headerText="Price" sortBy="#{item.price}" filterBy="#{item.price}">
-                    <h:outputText value="#{item.price}" />
+                    <h:outputText value="$#{item.price}" />
                 </p:column>  
                 
                 <p:column headerText="Stock" sortBy="#{item.stock}" filterBy="#{item.stock}">
@@ -74,7 +73,7 @@
                 </p:column>  
                 
                 <f:facet name="paginatorTopLeft" >
-                    <p:commandButton type="button" icon="ui-icon-plusthick" onclick="PF('addItemDialog').show()" rendered="#{login.role.equals('employee')}" />
+                    <p:commandButton type="button" icon="ui-icon-plusthick" onclick="PF('addItemDialog').show()" rendered="#{login.role.equals('employee')}" update=":addForm:addItem" />
                 </f:facet>
  
                 <!--f:facet name="paginatorBottomRight">
@@ -173,11 +172,11 @@
                         <h:message for="viewItemCategory" style="color:red;margin:8px;"/>
 
                         <h:outputText value="Discount:" />
-                        <h:outputText id="viewItemDiscount" value="#{iteminventoryview.selectedItem.discount}"/>
+                        <h:outputText id="viewItemDiscount" value="#{iteminventoryview.selectedItem.discount}%"/>
                         <h:message for="viewItemDiscount" style="color:red;margin:8px;"/>
 
                         <h:outputText value="Price:" />
-                        <h:outputText id="viewItemPrice" value="#{iteminventoryview.selectedItem.price}"/>
+                        <h:outputText id="viewItemPrice" value="$#{iteminventoryview.selectedItem.price}"/>
                         <h:message for="viewItemPrice" style="color:red;margin:8px;"/>
 
                         <h:outputText value="Stock:" />
