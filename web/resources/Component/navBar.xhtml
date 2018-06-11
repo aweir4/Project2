@@ -38,7 +38,8 @@ and open the template in the editor.
                                 outcome="${cc.attrs.pastOrdersLink}"
                                 rendered="${login.role eq 'customer'}"/>
                     <p:menuitem value="Settings" icon="ui-icon-gear"
-                                url="${cc.attrs.settingsLink}"/>
+                                url="${cc.attrs.settingsLink}"
+                                rendered="${login.role eq 'employee'}"/>
                     <p:menuitem value="Logout" icon="ui-icon-extlink"
                                 action="#{cc.attrs.logoutButtonAction}"/>
                 </p:submenu>
