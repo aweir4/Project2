@@ -195,7 +195,7 @@ public class Login implements Serializable {
      	context.getExternalContext().invalidateSession();
         
         try {
-            context.getExternalContext().redirect("/Project2/faces/index.xhtml");
+            context.getExternalContext().redirect("index.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
         } 
