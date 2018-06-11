@@ -114,6 +114,18 @@ public class ItemInventoryView implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     
+    public boolean showItem(Item item) {
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "login");   
+        
+        // Don't show out of stock items to customers
+        if (login.getCurrentCustomer() != null) {
+            return item.stock > 0;
+        }
+        
+        return true;
+    }
+    
     public void updateItem(final ActionEvent ae) {
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         DiscountDropdown dropdown = (DiscountDropdown) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(elContext, null, "discountdropdown");

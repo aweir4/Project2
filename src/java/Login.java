@@ -25,6 +25,7 @@ import javax.faces.event.ActionEvent;
  *
  * @author bibek
  * @author austin
+ * @author charnpreet
  */
 @Named(value = "login")
 @SessionScoped

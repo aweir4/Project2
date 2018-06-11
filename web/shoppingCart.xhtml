@@ -45,7 +45,10 @@
 
 
                             <f:facet name="footer">
-                                <p:commandButton value="Add" action="#{shoppingcart.addItem(item)}" update="itemPanel" />
+                                <p:commandButton id="addBtn" value="Add"  
+                                                 disabled="#{shoppingcart.disableAdd}"
+                                                 actionListener="#{shoppingcart.addItem(item)}" update="itemPanel">
+                                </p:commandButton>
                                 <p:commandButton value="Remove" action="#{shoppingcart.removeItem(item)}" update="itemsForm" />
                             </f:facet>                             
                             

@@ -15,12 +15,14 @@ and open the template in the editor.
     <composite:interface>
         <composite:attribute name = "homeLink" />
         <composite:attribute name = "userName" />
-        <composite:attribute name = "settingsLink" />
         <composite:attribute name= "cartLink"/>
         <composite:attribute name= "categoryLink"/>
         <composite:attribute name= "discountLink"/>
+        <composite:attribute name = "pastOrdersLink" />
+        <composite:attribute name = "settingsLink" />
         <composite:attribute name = "logoutButtonAction" 
                            method-signature = "void logout()"/>
+        
    </composite:interface>
    
    <composite:implementation>
@@ -32,6 +34,9 @@ and open the template in the editor.
                            style="float: right; padding:5px"
                            icon="ui-icon-person"
                            rendered="${!(login.login eq null)}">
+                    <p:menuitem value="Past Orders" icon="ui-icon-clock"
+                                url="${cc.attrs.pastOrdersLink}"
+                                rendered="${login.role eq 'customer'}"/>
                     <p:menuitem value="Settings" icon="ui-icon-gear"
                                 url="${cc.attrs.settingsLink}"/>
                     <p:menuitem value="Logout" icon="ui-icon-extlink"

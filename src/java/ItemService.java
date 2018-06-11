@@ -167,12 +167,19 @@ public class ItemService {
         //preparedStatement.executeUpdate();
         ResultSet results = preparedStatement.executeQuery();
         //statement.close();
-        preparedStatement.close();
-        con.commit();
-        con.close();
+
         
         results.next();
-        return results.getInt(1);
+        int ret = results.getInt(1);
+        
+        
+        preparedStatement.close();
+        con.commit();
+        con.close();       
+        
+        return ret;
+        
+        
         //Util.invalidateUserSession();
         //return true;       
     }

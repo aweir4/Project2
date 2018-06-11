@@ -38,9 +38,14 @@ public class ShoppingCart implements Serializable {
     private Map<Integer, Integer> itemCounts = new HashMap<>();
     private DBConnect dbConnect = new DBConnect();
     private double cartTotal = 0;
+    private boolean disableAdd=false;
     
     public List<Item> getItems() {
         return items;
+    }
+    
+    public boolean getDisableAdd(){
+        return disableAdd;
     }
     
     public void addItem(Item item) {
@@ -52,6 +57,10 @@ public class ShoppingCart implements Serializable {
         // adding item
         else {
             Integer itemCount = itemCounts.get(item.id);
+
+            if(itemCount == item.stock - 1) {
+                disableAdd=true;
+            } 
             itemCounts.replace(item.id, itemCount + 1);
         }
         cartTotal += item.getPurchasePrice();
@@ -59,6 +68,7 @@ public class ShoppingCart implements Serializable {
     
     public void removeItem(Item item) {
         Integer itemCount = itemCounts.get(item.id);
+        disableAdd = false;
         
         if (itemCount != null) {
             if (itemCount == 1) {
@@ -68,7 +78,7 @@ public class ShoppingCart implements Serializable {
             else {
                 itemCounts.replace(item.id, itemCount - 1);
             }
-            
+        
             cartTotal -= item.getPurchasePrice();
         }
     }
