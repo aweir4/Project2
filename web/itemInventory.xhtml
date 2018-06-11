@@ -7,6 +7,13 @@
       xmlns:tp = "http://java.sun.com/jsf/composite/Component"> 
     <h:head>
         <!--link href="css/stylesheet.css" rel="stylesheet" type="text/css" /-->
+        
+        <style type="text/css">
+        ui-helper-hidden {
+            display: none;
+        }
+        </style>        
+        
          <title>Item Inventory</title>
         <h1>Items</h1>
     </h:head>
@@ -20,7 +27,7 @@
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"
-                         
+                         rowStyleClass="#{iteminventoryview.showItem(item) ? '' : 'ui-helper-hidden'}"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15"
                          selectionMode="single"
