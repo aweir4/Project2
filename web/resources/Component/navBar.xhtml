@@ -13,26 +13,45 @@ and open the template in the editor.
       xmlns:composite = "http://java.sun.com/jsf/composite">
     
     <composite:interface>
-      <composite:attribute name = "link1" />
-      <composite:attribute name = "userName" />
-      <composite:attribute name = "settingsLink" />
-      <composite:attribute name = "logoutButtonAction" 
+        <composite:attribute name = "homeLink" />
+        <composite:attribute name = "userName" />
+        <composite:attribute name = "settingsLink" />
+        <composite:attribute name= "cartLink"/>
+        <composite:attribute name= "categoryLink"/>
+        <composite:attribute name= "discountLink"/>
+        <composite:attribute name = "logoutButtonAction" 
                            method-signature = "void logout()"/>
    </composite:interface>
    
    <composite:implementation>
-       <h:form id="defNavBar">
-           <p:menubar style="width:100%">
-           <p:menuitem value="Home" url="${cc.attrs.link1}"></p:menuitem>
-       
-            <p:submenu label="${cc.attrs.userName}" style="float: right"
-                       rendered="${!(login.login eq null)}">
-                <p:menuitem value="Settings" icon="ui-icon-gear"
-                            url="${cc.attrs.settingsLink}"/>
-                <p:menuitem value="Logout" icon="ui-icon-extlink"
-                            action="#{cc.attrs.logoutButtonAction}"/>
-            </p:submenu>
-        </p:menubar>
-       </h:form>
+        <h:form id="defNavBar">
+            <p:menubar style="width:100%">
+                <p:menuitem value="Home" url="${cc.attrs.homeLink}"
+                            containerStyle="padding:5px"/>
+                <p:submenu label="${cc.attrs.userName}" 
+                           style="float: right; padding:5px"
+                           icon="ui-icon-person"
+                           rendered="${!(login.login eq null)}">
+                    <p:menuitem value="Settings" icon="ui-icon-gear"
+                                url="${cc.attrs.settingsLink}"/>
+                    <p:menuitem value="Logout" icon="ui-icon-extlink"
+                                action="#{cc.attrs.logoutButtonAction}"/>
+                </p:submenu>
+                <p:submenu label="Modify" 
+                           style="float: right; padding:5px"
+                           icon="ui-icon-pencil"
+                           rendered="${login.role eq 'employee'}">
+                    <p:menuitem value="Category" 
+                                icon="ui-icon-grip-solid-horizontal"
+                                outcome="${cc.attrs.categoryLink}"/>
+                    <p:menuitem value="Discount" icon="ui-icon-scissors"
+                                outcome="#{cc.attrs.discountLink}"/>
+                </p:submenu>
+                <p:menuitem value="Your Cart" outcome="${cc.attrs.cartLink}"
+                            containerStyle="float: right; padding:5px" 
+                            icon="ui-icon-cart"
+                            rendered="${login.role eq 'customer'}"/>
+            </p:menubar>
+        </h:form>
    </composite:implementation>
 </html>

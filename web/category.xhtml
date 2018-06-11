@@ -3,12 +3,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:tp = "http://java.sun.com/jsf/composite/Component">
     <title>Categories</title>
     <h:head>
 <!--        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />-->
     </h:head>
     <h:body>
+        <tp:navBar homeLink = "/faces/itemInventory.xhtml" userName = "#{login.login}"
+                       settingsLink = "/faces/settings.xhtml"
+                       cartLink ="shoppingCart?faces-redirect=true"
+                       logoutButtonAction = "#{login.logout}" 
+                       categoryLink="category?faces-redirect=true"
+                       discountLink="discounts?faces-redirect=true"/>
+        
         <h1 style="text-align: center">Categories </h1>
         <p style="text-align: center">
             You may add/delete categories. Current categories are shown below:
