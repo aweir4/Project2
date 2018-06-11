@@ -17,6 +17,7 @@
                        logoutButtonAction = "#{login.logout}" 
                        categoryLink="category?faces-redirect=true"
                        discountLink="discounts?faces-redirect=true"/>
+        <h:link value="Past Orders" outcome="orderHistory?faces-redirect=true"/>
         <h:form id="form">
             <p:dataTable var="item" value="#{iteminventoryview.lazyModel}" rows="10"
                          paginator="true"
